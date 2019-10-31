@@ -13,7 +13,7 @@ const articleRoute = require('./routes/article-route')
 const gifRoute = require('./routes/gif-route')
 
 
-
+//EXPRESS
 const app = express();
 
 // MIDDLEWARE
