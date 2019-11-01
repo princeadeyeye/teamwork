@@ -2,22 +2,6 @@ const pool = require('../database/database')
 const uuidv4 = require ('uuid/v4')
 const moment = require ('moment')
 
-/*const writeArticle = (req, res, next) => {
-	const article = [
-		req.body.articleId,
-		req.body.input,
-		req.bodycomments,
-		req.body.postedBy,
-		req.body.created,
-		req.body.postedDate 	
-	]
-	client.query('writeArticleQuery', (err, result) => {
-		if (err) {
-			res.status(401).json(err)
-		}
-		res.status(200).json('Suceessfully add article')
-	})
-*/
 async function createArticle (req, res) {
     const createQuery = `
     INSERT INTO
