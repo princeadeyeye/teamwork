@@ -1,0 +1,25 @@
+{
+  "name": "teamwork",
+  "version": "1.0.0",
+  "description": "Teamwork",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodemon ./backend/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/princeadeyeye/teamwork.git"
+  },
+  "keywords": [
+    "Nodejs",
+    "postgres",
+    "React",
+    "javascript"
+  ],
+  "author": "Adeyeye Muiz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/princeadeyeye/teamwork/issues"
+  },
+  "homepage": "https://github.com/princeadeyeye/teamwork#readme"
+}
