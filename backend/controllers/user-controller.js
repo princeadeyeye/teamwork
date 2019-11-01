@@ -1,7 +1,7 @@
-const client = require('../models/database')
+const pool = require('../database/database')
 
 const listUsers =  (req, res, next) => {
-    client.query('SELECT * FROM users ORDER BY id ASC',  (err, result) => {
+    pool.query('SELECT * FROM users ORDER BY id ASC',  (err, result) => {
         if (err) {
             console.log(err);
             res.status(400).send(err);
@@ -14,7 +14,7 @@ const listUsers =  (req, res, next) => {
 
 const createUser = (req, res, next) => {
 	const user = [req.body.name, req.body.email]
-	 client.query ('INSERT INTO users(name, email) values($1, $2) RETURNING *', user, 
+	 pool.query ('INSERT INTO users(name, email) values($1, $2) RETURNING *', user, 
 	 			(err, result) => {
 	 				if(err) {
 	 					res.status(400).json(err)
@@ -26,7 +26,7 @@ const createUser = (req, res, next) => {
 
 const readUser = (req, res, next) => {
 	const id = req.params.userId;
-	client.query('SELECT * FROM users WHERE id = $1', [id],   (err, result) => {
+	pool.query('SELECT * FROM users WHERE id = $1', [id],   (err, result) => {
         if (err) {
             console.log(err);
             res.status(400).send(err);
