@@ -31,15 +31,6 @@ async function createArticle (req, res) {
   }
 
 
-/*const listArticles = (req, res, next) => {
-	client.query('listArticlesQuery', (err, result) => {
-		if (err) {
-			res.status(401).json(err)
-		}
-		res.status(200).json('result.rows')
-	})
-}*/
-
 /*const getArticle = (req, res, next) => {
 	const id = req.params.articleId;
 	client.query('getArticleQuery', (err, result) => {
