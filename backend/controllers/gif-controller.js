@@ -1,20 +1,34 @@
 const pool = require('../database/database')
+const uuid = require('uuid')
 
-/*const writeGif = (req, res, next) => {
-	const gif = [
-		req.body.gifId,
-		req.body.gif,
-		req.gif_comment,
-		req.body.gif_by,
-		req.body.posted_gif_Date 	
-	]
-	pool.query('writeGifQuery', gif (err, result) => {
-		if (err) {
-			res.status(401).json(err)
-		}
-		res.status(200).json('Suceessfully add gif')
-	})
-}*/
+
+async function createGif (req, res) {
+    const createQuery = `
+    INSERT INTO
+      gifs(
+      	gifId, 			
+		image,			
+		title,
+		imageUrl, 				
+		createdOn				
+        )
+      VALUES($1, $2, $3, $4, $5)
+      returning *`;
+    const values = [
+      uuid,
+      req.body.image,
+      req.body.title,
+      req.body.imageUrl,
+      moment(new Date())
+    ];
+
+    try {
+      const { rows } = await pool.query(createQuery, values);
+        return res.status(201).send(rows[0]);
+    } catch(error) {
+      return res.status(400).send(error);
+    }
+  }
 
 /*const listGifs = (req, res, next) => {
 	pool.query('listGifs', (err, result) => {
@@ -78,4 +92,4 @@ const pool = require('../database/database')
 		res.status(200).json(`Article modified with ID: ${req.params.articleId} given comment`);
 	})*/
 
-module.exports = {writeGif, updateGif, removeGif, listGifs, getGif, commentGif }
+module.exports = {createGif }
