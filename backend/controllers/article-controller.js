@@ -31,7 +31,6 @@ async function createArticle (req, res) {
     }
   }
 
-
 async function updateArticle(req, res) {
     const findOneQuery = 'SELECT * FROM articles WHERE articleId=$1';
     const updateOneQuery =`UPDATE articles
