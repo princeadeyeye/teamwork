@@ -36,7 +36,7 @@ async function updateArticle(req, res) {
     const findOneQuery = 'SELECT * FROM articles WHERE articleId=$1';
     const updateOneQuery =`UPDATE articles
       SET article=$1,title=$2,comment=$3,createdOn=$4
-      WHERE id=$5 returning *`;
+      WHERE articleId=$5 returning *`;
     try {
       const { rows } = await pool.query(findOneQuery, [req.params.articleId]);
       if(!rows[0]) {
@@ -55,8 +55,43 @@ async function updateArticle(req, res) {
       return res.status(400).send(err);
     }
   }
+/*  const listArticles =  (req, res, next) => {
+    pool.query('SELECT * FROM articles ORDER BY articleId ASC',  (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(400).send(err);
+        }
+        res.status(200).json(result);
+         
+    });
 
-/*const getArticle = (req, res, next) => {
+}*/
+async function listArticles(req, res) {
+    const texts = 'SELECT * FROM articles ORDER BY articleId ASC';
+    try {
+      const { rows } = await pool.query(texts);
+      if (!rows) {
+        return res.status(404).json({'message': 'articles not found'});
+      }
+      return res.status(200).send(rows);
+    } catch(error) {
+      return res.status(400).send(error)
+    }
+  }
+async function getArticle(req, res) {
+    const text = 'SELECT * FROM articles WHERE articleId = $1';
+    try {
+      const { rows } = await pool.query(text, [req.params.articleId]);
+      if (!rows[0]) {
+        return res.status(404).json({'message': 'article not found'});
+      }
+      return res.status(200).send(rows[0]);
+    } catch(error) {
+      return res.status(400).send(error)
+    }
+  }
+  /*
+const getArticle = (req, res, next) => {
 	const id = req.params.articleId;
 	client.query('getArticleQuery', (err, result) => {
 		if (err) {
@@ -65,7 +100,8 @@ async function updateArticle(req, res) {
 		res.status(200).json('result.rows')
 	})
 }
-/*const removeArticle = (req, res, next) => {
+/*
+const removeArticle = (req, res, next) => {
 	const id = req.params.articleId;
 	client.query('removeArticleQuery', [id] , (err, result) => {
 		if(err) {
@@ -74,7 +110,7 @@ async function updateArticle(req, res) {
 		}
 		res.status(200).json('Delete successfully')
 	})
-}*/
+}
 
 
 /*const commentArticle = (req, res, next) => {
@@ -91,4 +127,4 @@ async function updateArticle(req, res) {
 		res.status(200).json(`Article modified with ID: ${req.params.articleId} given comment`);
 	})*/
 
- module.exports = {createArticle, updateArticle}
+ module.exports = {createArticle, updateArticle, getArticle, listArticles}
