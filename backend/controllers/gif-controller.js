@@ -78,4 +78,4 @@ const pool = require('../database/database')
 		res.status(200).json(`Article modified with ID: ${req.params.articleId} given comment`);
 	})*/
 
-// module.exports = {writeGif, listGifs, getGif, updateGif, removeGif, commentGif }
+module.exports = {writeGif, updateGif, removeGif, listGifs, getGif, commentGif }
