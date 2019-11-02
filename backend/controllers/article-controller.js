@@ -55,17 +55,7 @@ async function updateArticle(req, res) {
       return res.status(400).send(err);
     }
   }
-/*  const listArticles =  (req, res, next) => {
-    pool.query('SELECT * FROM articles ORDER BY articleId ASC',  (err, result) => {
-        if (err) {
-            console.log(err);
-            res.status(400).send(err);
-        }
-        res.status(200).json(result);
-         
-    });
 
-}*/
 async function listArticles(req, res) {
     const texts = 'SELECT * FROM articles ORDER BY articleId ASC';
     try {
@@ -90,27 +80,20 @@ async function getArticle(req, res) {
       return res.status(400).send(error)
     }
   }
+
+  async function removeArticle(req, res, next) {
+    const deleteQuery = `DELETE FROM articles WHERE articleId=$1 RETURNING *`;
+    try{
+        const { rows } = await pool.query(deleteQuery, [req.params.articleId]);
+          if(!rows[0]) {
+            return res.status(400).send({'message': 'Article not found'})
+          }
+          return res.status(204).send({'message': 'Article Deleted'})
+      } catch(error) {
+      return res.status(404).send(error)
+    }
+  }
   /*
-const getArticle = (req, res, next) => {
-	const id = req.params.articleId;
-	client.query('getArticleQuery', (err, result) => {
-		if (err) {
-			res.status(401).json(err)
-		}
-		res.status(200).json('result.rows')
-	})
-}
-/*
-const removeArticle = (req, res, next) => {
-	const id = req.params.articleId;
-	client.query('removeArticleQuery', [id] , (err, result) => {
-		if(err) {
-			coonsole.log(err)
-			res.status(401).json(err);
-		}
-		res.status(200).json('Delete successfully')
-	})
-}
 
 
 /*const commentArticle = (req, res, next) => {
@@ -127,4 +110,4 @@ const removeArticle = (req, res, next) => {
 		res.status(200).json(`Article modified with ID: ${req.params.articleId} given comment`);
 	})*/
 
- module.exports = {createArticle, updateArticle, getArticle, listArticles}
+ module.exports = {createArticle, updateArticle, getArticle, listArticles, removeArticle}
