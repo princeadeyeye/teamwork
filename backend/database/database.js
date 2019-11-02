@@ -19,11 +19,11 @@ pool.on('connect', () => {
 //CREATING TABLES
 
 const articleTableQuery = ` CREATE TABLE IF NOT EXISTS articles (
-	articleId 			INT,
-	article 			VARCHAR(16),
-	title 				VARCHAR(16),
-	createdOn 			DATE 		NOT NULL,
-	comment				VARCHAR(16),
+	articleId 		SERIAL,
+	article 			VARCHAR(255),
+	title 				VARCHAR(255),
+	createdOn 			DATE,
+	comment				VARCHAR(255),
 	PRIMARY KEY (articleId)
 ); `
 
@@ -45,8 +45,8 @@ CREATE TABLE IF NOT EXISTS gifs (
 	gifId 			INT,
 	image 			BYTEA,
 	title 			VARCHAR(16),
-	createdOn 		DATE 			NOT NULL,
-	imageUrl		VARCHAR(16) 	NOT NULL,
+	createdOn 		DATE,
+	imageUrl		VARCHAR(16),
 	PRIMARY KEY (gifId)
 )`
 

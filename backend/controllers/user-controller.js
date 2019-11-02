@@ -6,7 +6,7 @@ const listUsers =  (req, res, next) => {
             console.log(err);
             res.status(400).send(err);
         }
-        res.status(200).json(result.rows);
+        res.status(200).json(result);
          
     });
 
@@ -31,7 +31,7 @@ const readUser = (req, res, next) => {
             console.log(err);
             res.status(400).send(err);
         }
-        res.status(200).json(result.rows);
+        res.status(200).json(result);
          
     });
 }

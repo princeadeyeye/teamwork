@@ -1,5 +1,5 @@
 const pool = require('../database/database')
-const uuidv4 = require ('uuid/v4')
+const uuid = require ('uuid')
 const moment = require ('moment')
 
 async function createArticle (req, res) {
@@ -15,12 +15,13 @@ async function createArticle (req, res) {
       VALUES($1, $2, $3, $4, $5)
       returning *`;
     const values = [
-      uuidv4(),
+      req.body.articleId,
       req.body.article,
       req.body.title,
       req.body.comment,
       moment(new Date())
     ];
+
 
     try {
       const { rows } = await pool.query(createQuery, values);
@@ -31,6 +32,30 @@ async function createArticle (req, res) {
   }
 
 
+async function updateArticle(req, res) {
+    const findOneQuery = 'SELECT * FROM articles WHERE articleId=$1';
+    const updateOneQuery =`UPDATE articles
+      SET article=$1,title=$2,comment=$3,createdOn=$4
+      WHERE id=$5 returning *`;
+    try {
+      const { rows } = await pool.query(findOneQuery, [req.params.articleId]);
+      if(!rows[0]) {
+        return res.status(404).send({'message': 'article not found'});
+      }
+      const values = [
+        req.body.article || rows[0].article,
+        req.body.title || rows[0].title,
+        req.body.comment || rows[0].comment,
+        moment(new Date()),
+        req.params.articleId,
+      ];
+      const response = await pool.query(updateOneQuery, values);
+      return res.status(200).send(response.rows[0]);
+    } catch(err) {
+      return res.status(400).send(err);
+    }
+  }
+
 /*const getArticle = (req, res, next) => {
 	const id = req.params.articleId;
 	client.query('getArticleQuery', (err, result) => {
@@ -39,26 +64,7 @@ async function createArticle (req, res) {
 		}
 		res.status(200).json('result.rows')
 	})
-}*/
-
-/*const updateArticle = (req, res, next) => {
-	const article = [
-		req.body.articleId,
-		req.body.input,
-		req.bodycomments,
-		req.body.postedBy,
-		req.body.created,
-		req.body.postedDate,
-		req.params.articleId
-		]
-	client.query('updateArticleQuery', article, (err, result) => {
-		if(err) {
-			console.log(err);
-			res.status(401).json(err);
-		}
-		res.status(200).json(`Article modified with ID: ${req.params.articleId}`);
-	})
-}*/
+}
 /*const removeArticle = (req, res, next) => {
 	const id = req.params.articleId;
 	client.query('removeArticleQuery', [id] , (err, result) => {
@@ -85,4 +91,4 @@ async function createArticle (req, res) {
 		res.status(200).json(`Article modified with ID: ${req.params.articleId} given comment`);
 	})*/
 
- module.exports = {createArticle}
+ module.exports = {createArticle, updateArticle}
