@@ -46,4 +46,25 @@ const updateUser = (req, res, next) => {
       return res.status(400).send(error);
     }
   }
-module.exports = {listUsers, readUser, updateUser, removeUser}
+
+async function feeds(req, res) {
+      const gifFeed = 'SELECT * FROM gifs ORDER BY gifId ASC';
+      const articleFeed = 'SELECT * FROM articles ORDER BY articleId ASC';
+
+      try {
+        const { rows } = await pool.query(gifFeed);
+        if (!rows) {
+          const { rows } = await pool.query(articleFeed);
+            if(!rows) {
+               return res.status(404).json({'message': 'articles and gifs not found'});
+            }
+            return res.status(200).send(rows);
+        }
+        const { rows } = await pool.query(articleFeed);
+        return res.status(200).send(rows);
+    } catch(error) {
+        return res.status(400).send(error)
+    }
+  }
+
+module.exports = {listUsers, readUser, updateUser, removeUser, feeds}
