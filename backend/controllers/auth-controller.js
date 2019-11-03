@@ -40,13 +40,8 @@ const Helper = require ('../Helper');
       return res.status(400).send(error);
     }
   }
-  /**
-   * Login
-   * @param {object} req 
-   * @param {object} res
-   * @returns {object} user object 
-   */
-/*  async login(req, res) {
+
+  async function signin(req, res) {
     if (!req.body.email || !req.body.password) {
       return res.status(400).send({'message': 'Some values are missing'});
     }
@@ -54,21 +49,34 @@ const Helper = require ('../Helper');
       return res.status(400).send({ 'message': 'Please enter a valid email address' });
     }
     const text = 'SELECT * FROM users WHERE email = $1';
+    const insertQuery = `INSERT INTO 
+      login(email, hashed_password) 
+      values($1, $2)
+      returning *`;
     try {
-      const { rows } = await db.query(text, [req.body.email]);
+      const { rows } = await pool.query(text, [req.body.email]);
       if (!rows[0]) {
         return res.status(400).send({'message': 'The credentials you provided is incorrect'});
       }
-      if(!Helper.comparePassword(rows[0].password, req.body.password)) {
-        return res.status(400).send({ 'message': 'The credentials you provided is incorrect' });
-      }
-      const token = Helper.generateToken(rows[0].id);
-      return res.status(200).send({ token });
+        if(!Helper.comparePassword(rows[0].password, req.body.password)) {
+          return res.status(400).send({ 'message': 'The credentials you provided is incorrect' });
+        }
+        const token = Helper.generateToken(rows[0].userId);
+        const hashedPassword = Helper.hashPassword(req.body.password);
+        const values = [
+          req.body.email,
+          hashedPassword
+        ];
+        const response = await pool.query(insertQuery, values);
+        return res.status(200).send({ token });
     } catch(error) {
       return res.status(400).send(error)
     }
-  },
-  /**
+
+    // update login table
+  }
+
+  /*
    * Delete A User
    * @param {object} req 
    * @param {object} res 
@@ -88,4 +96,4 @@ const Helper = require ('../Helper');
   }
 */
 
-module.exports = { createUser }
+module.exports = { createUser, signin }

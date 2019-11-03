@@ -25,7 +25,6 @@ pool.on('connect', () => {
 	    first_name  VARCHAR(20)     NOT NULL,
 	    last_name   VARCHAR(20)     NOT NULL,
 	    email     	VARCHAR(250) 	NOT NULL,    
-	    password 	VARCHAR(20)		NOT NULL,
 	    jobRole 	VARCHAR(20) 	NOT NULL,
 	    department	VARCHAR(20) 	NOT NULL,
 	    address		VARCHAR(20) 	NOT NULL,
