@@ -3,8 +3,6 @@ const userCtrl = require('../controllers/user-controller');
 
 const router = express.Router();
 
-//create a user
- router.post('/api/v1/users', userCtrl.createUser)
 
 //list all users
 router.get('/api/v1/users', userCtrl.listUsers)
@@ -16,7 +14,7 @@ router.get('/api/v1/users/:userId', userCtrl.readUser)
 router.patch('/api/v1/users:userId', userCtrl.updateUser)
 
 //delete a user
-router.delete('api/v1/users/:userId', userCtrl.removeUser)
+// router.delete('api/v1/users/:userId', userCtrl.removeUser)
 
 // view all gif and articles
 // router.get('/api/v1/feed/', authCtrl.requireSignin, gifCtrl.listGif)

@@ -67,13 +67,13 @@ const Helper = require ('../Helper');
           req.body.email,
           hashedPassword
         ];
+        //update login table
         const response = await pool.query(insertQuery, values);
         return res.status(200).send({ token });
     } catch(error) {
       return res.status(400).send(error)
     }
 
-    // update login table
   }
 
   /*
