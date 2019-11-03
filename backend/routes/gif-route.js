@@ -10,7 +10,7 @@ router.post('/api/v1/gifs/', gifCtrl.createGif)
 router.put('api/v1/gifs/:gifId', gifCtrl.updateGif)
 
 // delete gif 
-// router.delete('/api/v1/gifs/:gifId', gifCtrl.removeGif)
+router.delete('/api/v1/gifs/:gifId', gifCtrl.removeGif)
 
 // get all gifs
 router.get('/api/v1/gifs', gifCtrl.listGifs )

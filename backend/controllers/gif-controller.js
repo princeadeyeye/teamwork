@@ -61,7 +61,7 @@ async function getGif(req, res) {
       SET image=$1, title=$2, imageUrl=$3, createdOn=$4
       WHERE gifId=$5 returning *`;
     try {
-      const { rows } = await pool.query(findOneQuery, [req.params.articleId]);
+      const { rows } = await pool.query(findOneQuery, [req.params.gifId]);
       if(!rows[0]) {
         return res.status(404).send({'message': 'Gif not found'});
       }
@@ -70,7 +70,7 @@ async function getGif(req, res) {
         req.body.title || rows[0].title,
         req.body.imageUrl || rows[0].imageUrl,
         moment(new Date()),
-        req.params.articleId,
+        req.params.gifId,
       ];
       const response = await pool.query(updateOneQuery, values);
       return res.status(200).send(response.rows[0]);
@@ -80,16 +80,18 @@ async function getGif(req, res) {
   }
 
 
-/*const removeGif = (req, res, next) => {
-	const id = req.params.gifId;
-	pool.query('removeGifQuery', [id] , (err, result) => {
-		if(err) {
-			coonsole.log(err)
-			res.status(401).json(err);
-		}
-		res.status(200).json('Delete successfully')
-	})
-}*/
+ async function removeGif(req, res, next) {
+    const deleteQuery = `DELETE FROM gifs WHERE gifId=$1 RETURNING *`;
+    try{
+        const { rows } = await pool.query(deleteQuery, [req.params.gifId]);
+          if(!rows[0]) {
+            return res.status(400).send({'message': 'Gif not found'})
+          }
+          return res.status(204).send({'message': 'Gif Deleted'})
+      } catch(error) {
+      return res.status(404).send(error)
+    }
+  }
 
 
 /*const commentGif = (req, res, next) => {
@@ -106,4 +108,4 @@ async function getGif(req, res) {
 		res.status(200).json(`Article modified with ID: ${req.params.articleId} given comment`);
 	})*/
 
-module.exports = {createGif, getGif, listGifs, updateGif }
+module.exports = {createGif, getGif, listGifs, updateGif, removeGif }
