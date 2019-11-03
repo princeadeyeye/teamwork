@@ -7,21 +7,18 @@ async function createArticle (req, res) {
     INSERT INTO
       articles(
       	articleId, 			
-		article,			
-		title,
-		comment, 				
-		createdOn				
+		    article,			
+		    title,		
+		    createdOn				
         )
       VALUES($1, $2, $3, $4, $5)
       returning *`;
     const values = [
-      req.body.articleId,
+      uuid,
       req.body.article,
       req.body.title,
-      req.body.comment,
       moment(new Date())
     ];
-
 
     try {
       const { rows } = await pool.query(createQuery, values);
@@ -34,8 +31,8 @@ async function createArticle (req, res) {
 async function updateArticle(req, res) {
     const findOneQuery = 'SELECT * FROM articles WHERE articleId=$1';
     const updateOneQuery =`UPDATE articles
-      SET article=$1,title=$2,comment=$3,createdOn=$4
-      WHERE articleId=$5 returning *`;
+      SET article=$1,title=$2,createdOn=$3
+      WHERE articleId=$4 returning *`;
     try {
       const { rows } = await pool.query(findOneQuery, [req.params.articleId]);
       if(!rows[0]) {
@@ -44,7 +41,6 @@ async function updateArticle(req, res) {
       const values = [
         req.body.article || rows[0].article,
         req.body.title || rows[0].title,
-        req.body.comment || rows[0].comment,
         moment(new Date()),
         req.params.articleId,
       ];
@@ -95,7 +91,7 @@ async function getArticle(req, res) {
 
 async function commentArticle(req, res) {
     const findOneQuery = 'SELECT * FROM articles WHERE articleId=$1';
-    const updateCommentQuery =`UPDATE articles
+    const updateCommentQuery =`UPDATE comments
       SET comment=$1 WHERE articleId=$2 returning *`;
     try {
       const { rows } = await pool.query(findOneQuery, [req.params.articleId]);
