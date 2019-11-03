@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/api/v1/gifs/', gifCtrl.createGif)
 
 // edit gif
-// router.put('api/v1/gifs/:gifId', gifCtrl.updateGif)
+router.put('api/v1/gifs/:gifId', gifCtrl.updateGif)
 
 // delete gif 
 // router.delete('/api/v1/gifs/:gifId', gifCtrl.removeGif)

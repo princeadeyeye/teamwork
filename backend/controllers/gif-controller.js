@@ -55,24 +55,31 @@ async function getGif(req, res) {
     }
   }
 
+  async function updateGif(req, res) {
+    const findOneQuery = 'SELECT * FROM gifs WHERE gifId=$1';
+    const updateOneQuery =`UPDATE gifs
+      SET image=$1, title=$2, imageUrl=$3, createdOn=$4
+      WHERE gifId=$5 returning *`;
+    try {
+      const { rows } = await pool.query(findOneQuery, [req.params.articleId]);
+      if(!rows[0]) {
+        return res.status(404).send({'message': 'Gif not found'});
+      }
+      const values = [
+        req.body.image || rows[0].image,
+        req.body.title || rows[0].title,
+        req.body.imageUrl || rows[0].imageUrl,
+        moment(new Date()),
+        req.params.articleId,
+      ];
+      const response = await pool.query(updateOneQuery, values);
+      return res.status(200).send(response.rows[0]);
+    } catch(err) {
+      return res.status(400).send(err);
+    }
+  }
 
-/*const updateGif = (req, res, next) => {
-	const gif = [
-		req.body.gifId,
-		req.body.gif,
-		req.gif_comment,
-		req.body.gif_by,
-		req.body.posted_gif_Date,
-		req.params.articleId
-		]
-	pool.query('updateGifQuery', article, (err, result) => {
-		if(err) {
-			console.log(err);
-			res.status(401).json(err);
-		}
-		res.status(200).json(`Gif modified with ID: ${req.params.articleId}`);
-	})
-}*/
+
 /*const removeGif = (req, res, next) => {
 	const id = req.params.gifId;
 	pool.query('removeGifQuery', [id] , (err, result) => {
@@ -99,4 +106,4 @@ async function getGif(req, res) {
 		res.status(200).json(`Article modified with ID: ${req.params.articleId} given comment`);
 	})*/
 
-module.exports = {createGif, getGif, listGifs }
+module.exports = {createGif, getGif, listGifs, updateGif }
