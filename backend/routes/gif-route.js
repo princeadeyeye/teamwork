@@ -13,10 +13,10 @@ router.post('/api/v1/gifs/', gifCtrl.createGif)
 // router.delete('/api/v1/gifs/:gifId', gifCtrl.removeGif)
 
 // get all gifs
-// router.get('/api/v1/gifs', gifCtrl.listGifs )
+router.get('/api/v1/gifs', gifCtrl.listGifs )
 
 // view specific gif
-// router.get('api/v1/gifs/:gifId', gifCtrl.getGif)
+router.get('api/v1/gifs/:gifId', gifCtrl.getGif)
 
 // comment on gif
 // router.put('api/v1/gifs/:gifId/comment', gifCtrl.commentGif)

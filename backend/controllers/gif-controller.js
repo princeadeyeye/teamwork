@@ -30,24 +30,31 @@ async function createGif (req, res) {
     }
   }
 
-/*const listGifs = (req, res, next) => {
-	pool.query('listGifs', (err, result) => {
-		if (err) {
-			res.status(401).json(err)
-		}
-		res.status(200).json('result.rows')
-	})
-}*/
+  async function listGifs(req, res) {
+    const texts = 'SELECT * FROM gifs ORDER BY gifId ASC';
+    try {
+      const { rows } = await pool.query(texts);
+      if (!rows) {
+        return res.status(404).json({'message': 'Gifs not found'});
+      }
+      return res.status(200).send(rows);
+    } catch(error) {
+      return res.status(400).send(error)
+    }
+  }
+async function getGif(req, res) {
+    const text = 'SELECT * FROM gifs WHERE gifId = $1';
+    try {
+      const { rows } = await pool.query(text, [req.params.gifId]);
+      if (!rows[0]) {
+        return res.status(404).json({'message': 'Gif not found'});
+      }
+      return res.status(200).send(rows[0]);
+    } catch(error) {
+      return res.status(400).send(error)
+    }
+  }
 
-/*const getGif = (req, res, next) => {
-	const id = req.params.gifId;
-	pool.query('getGifQuery', (err, result) => {
-		if (err) {
-			res.status(401).json(err)
-		}
-		res.status(200).json('result.rows')
-	})
-}*/
 
 /*const updateGif = (req, res, next) => {
 	const gif = [
@@ -92,4 +99,4 @@ async function createGif (req, res) {
 		res.status(200).json(`Article modified with ID: ${req.params.articleId} given comment`);
 	})*/
 
-module.exports = {createGif }
+module.exports = {createGif, getGif, listGifs }
