@@ -94,18 +94,23 @@ async function getGif(req, res) {
   }
 
 
-/*const commentGif = (req, res, next) => {
-	const comment = [
-		req.bodycomments,
-		req.body.commentBy,
-		req.params.articleId
-		]
-	pool.query('commentGifQuery', comment, (err, result) => {
-		if(err) {
-			console.log(err);
-			res.status(401).json(err);
-		}
-		res.status(200).json(`Article modified with ID: ${req.params.articleId} given comment`);
-	})*/
-
-module.exports = {createGif, getGif, listGifs, updateGif, removeGif }
+async function commentGif(req, res) {
+    const findOneQuery = 'SELECT * FROM gifs WHERE gifId=$1';
+    const updateCommentQuery =`UPDATE comments
+      SET comment=$1 WHERE gifId=$2 returning *`;
+    try {
+      const { rows } = await pool.query(findOneQuery, [req.params.gifId]);
+      if(!rows[0]) {
+        return res.status(404).send({'message': 'Gif not found'});
+      }
+      const values = [
+        req.body.comment || rows[0].comment,
+        req.params.gifId
+      ];
+      const response = await pool.query(updateOneQuery, values);
+      return res.status(200).send(response.rows[0]);
+    } catch(err) {
+      return res.status(400).send(err);
+    }
+  }
+module.exports = {createGif, getGif, listGifs, updateGif, removeGif, commentGif }

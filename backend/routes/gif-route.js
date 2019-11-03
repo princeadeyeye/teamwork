@@ -19,6 +19,6 @@ router.get('/api/v1/gifs', gifCtrl.listGifs )
 router.get('api/v1/gifs/:gifId', gifCtrl.getGif)
 
 // comment on gif
-// router.put('api/v1/gifs/:gifId/comment', gifCtrl.commentGif)
+router.put('api/v1/gifs/:gifId/comment', gifCtrl.commentGif)
 
 module.exports = router;
