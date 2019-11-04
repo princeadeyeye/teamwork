@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const expressJwt = require('express-jwt')
 
 
 const Helper = {
@@ -22,7 +23,22 @@ const Helper = {
 			"MY_SECRET_KEY", { expiresIn: '1d'}
 		);
 			return token;
+	},
+
+	hasAuthorization (req, res, next) {
+  		  const authorized = req.profile && req.auth && req.profile._id == req.auth._id
+ 			 if (!(authorized)) {
+   		 return res.status('403').json({
+     		 error: "User is not authorized"
+    		})
+  		}
+  		next()
 	}
 }
+
+	 const requireSignin = expressJwt({
+   		secret: "MY_SECRET_KEY",
+   		userProperty: 'auth'
+  	})
 
 module.exports = Helper
