@@ -21,7 +21,7 @@ pool.on('connect', () => {
 
 
  const userTableQuery = ` CREATE TABLE IF NOT EXISTS users (
-	    userId 		uuid			NOT NULL,
+	    userId 		INT,
 	    first_name  VARCHAR(20)     NOT NULL,
 	    last_name   VARCHAR(20)     NOT NULL,
 	    email     	VARCHAR(250) 	NOT NULL,    
@@ -33,12 +33,12 @@ pool.on('connect', () => {
 ); `
 
 const commentTableQuery = ` CREATE TABLE IF NOT EXISTS comments (
-	commentId 		uuid 			NOT NULL,
+	commentId 		INT,
 	comment 		VARCHAR(250)	NOT NULL,
 	createdOn 		DATE			NOT	NULL,
-	articleId 		uuid 			NOT NULL,
- 	userId 			uuid			NOT NULL,
- 	gifId 			uuid 			NOT NULL,
+	articleId 		INT,
+ 	userId 			INT,
+ 	gifId 			INT,
  	PRIMARY KEY (commentId),
  	FOREIGN KEY (userId) REFERENCES users (userId),
  	FOREIGN KEY	(gifId) REFERENCES gifs (gifId),
@@ -47,8 +47,7 @@ const commentTableQuery = ` CREATE TABLE IF NOT EXISTS comments (
 )`
 
 const gifTableQuery = ` CREATE TABLE IF NOT EXISTS gifs (
-	gifId 			uuid 			NOT NULL,
-	image 			BYTEA			NOT NULL,
+	gifId 			INT,
 	title 			VARCHAR(255) 	NOT NULL,
 	createdOn 		DATE			NOT NULL,
 	imageUrl		VARCHAR(255) 	NOT NULL,
@@ -56,7 +55,7 @@ const gifTableQuery = ` CREATE TABLE IF NOT EXISTS gifs (
 )`
 
 const articleTableQuery = ` CREATE TABLE IF NOT EXISTS articles (
-	articleId 			uuid 			NOT NULL,
+	articleId 			INT,
 	article 			VARCHAR(255)  	NOT NULL,
 	title 				VARCHAR(255)	NOT NULL,
 	createdOn 			DATE			NOT NULL,

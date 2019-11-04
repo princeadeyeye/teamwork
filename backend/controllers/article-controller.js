@@ -11,10 +11,10 @@ async function createArticle (req, res) {
 		    title,		
 		    createdOn				
         )
-      VALUES($1, $2, $3, $4, $5)
+      VALUES($1, $2, $3, $4)
       returning *`;
     const values = [
-      uuid,
+      uuid(),
       req.body.article,
       req.body.title,
       moment(new Date())
