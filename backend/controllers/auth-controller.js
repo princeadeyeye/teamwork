@@ -32,12 +32,13 @@ const Helper = require ('../Helper');
     try {
       const { rows } = await pool.query(createQuery, values);
       const token = Helper.generateToken(rows[0].userId);
-      return res.status(201).send({ token });
+      const userId = req.body.userId;
+      return res.status(201).json({ "token": token, "userId": userId, "message": "User account successfully created" });
     } catch(error) {
       if (error.routine === '_bt_check_unique') {
-        return res.status(400).send({ 'message': 'User with that EMAIL already exist' })
+        return res.status(400).json({ 'message': 'User with that EMAIL already exist' })
       }
-      return res.status(400).send(error);
+      return res.status(400).json(error);
     }
   }
 
