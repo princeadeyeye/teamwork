@@ -14,7 +14,7 @@ async function createArticle (req, res) {
       VALUES($1, $2, $3, $4)
       returning *`;
     const values = [
-      uuid(),
+      default,
       req.body.article,
       req.body.title,
       moment(new Date())
@@ -89,25 +89,36 @@ async function getArticle(req, res) {
     }
   }
 
-async function commentArticle(req, res) {
-    const findOneQuery = 'SELECT * FROM articles WHERE articleId=$1';
-    const updateCommentQuery =`UPDATE comments
-      SET comment=$1 WHERE articleId=$2 returning *`;
+async function commentArticle (req, res) {
+    const createCommentQuery = `
+    INSERT INTO
+      articles(
+        commentId,      
+        comment,      
+        createdOn,    
+        articleId,
+        userId, 
+        gifId      
+        )
+      VALUES($1, $2, $3, $4, $5, $6)
+      returning *`;
+    const values = [
+      default,
+      req.body.comment,
+      moment(new Date()),
+      req.body.articleId,
+      req.body.userId,
+      req.body.gifId
+    ];
+
     try {
-      const { rows } = await pool.query(findOneQuery, [req.params.articleId]);
-      if(!rows[0]) {
-        return res.status(404).send({'message': 'article not found'});
-      }
-      const values = [
-        req.body.comment || rows[0].comment,
-        req.params.articleId
-      ];
-      const response = await pool.query(updateOneQuery, values);
-      return res.status(200).send(response.rows[0]);
-    } catch(err) {
-      return res.status(400).send(err);
+      const { rows } = await pool.query(createCommentQuery, values);
+        return res.status(201).send(rows[0]);
+    } catch(error) {
+      return res.status(400).send(error);
     }
   }
+
 
 
  module.exports = {createArticle, updateArticle, getArticle, listArticles, removeArticle, commentArticle}

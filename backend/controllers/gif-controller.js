@@ -6,17 +6,15 @@ async function createGif (req, res) {
     const createQuery = `
     INSERT INTO
       gifs(
-      	gifId, 			
-		image,			
-		title,
-		imageUrl, 				
-		createdOn				
+      gifId, 			
+		  title,
+		  imageUrl, 				
+		  createdOn				
         )
-      VALUES($1, $2, $3, $4, $5)
+      VALUES($1, $2, $3, $4)
       returning *`;
     const values = [
-      uuid,
-      req.body.image,
+      default,
       req.body.title,
       req.body.imageUrl,
       moment(new Date())
