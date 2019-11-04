@@ -14,7 +14,7 @@ async function createArticle (req, res) {
       VALUES($1, $2, $3, $4)
       returning *`;
     const values = [
-      default,
+      DEFAULT,
       req.body.article,
       req.body.title,
       moment(new Date())
@@ -102,7 +102,7 @@ async function commentArticle (req, res) {
       VALUES($1, $2, $3, $4, $5)
       returning *`;
     const values = [
-      default,
+      DEFAULT,
       req.body.comment,
       moment(new Date()),
       req.body.userId,

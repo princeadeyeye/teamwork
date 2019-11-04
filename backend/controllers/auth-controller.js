@@ -19,7 +19,7 @@ const Helper = require ('../Helper');
         VALUES($1, $2, $3, $4, $5, $6, $7, $8)
         returning *`;
         const values = [
-          default,
+          DEFAULT,
           req.body.firstName,
           req.body.lastName,
           req.body.email,

@@ -50,9 +50,10 @@ const updateUser = (req, res, next) => {
 async function feeds(req, res) {
       const gifFeed = 'SELECT * FROM gifs ORDER BY gifId ASC';
       const articleFeed = 'SELECT * FROM articles ORDER BY articleId ASC';
-
+      const feedsQuery = ``
       try {
         const { rows } = await pool.query(gifFeed);
+        const { rows } = await pool.query(articleFeed);
         if (!rows) {
           const { rows } = await pool.query(articleFeed);
             if(!rows) {

@@ -14,7 +14,7 @@ async function createGif (req, res) {
       VALUES($1, $2, $3, $4)
       returning *`;
     const values = [
-      default,
+      DEFAULT,
       req.body.title,
       req.body.imageUrl,
       moment(new Date())
@@ -104,7 +104,7 @@ async function commentGif (req, res) {
       VALUES($1, $2, $3, $4, $5, $6)
       returning *`;
     const values = [
-      default,
+      DEFAULT,
       req.body.comment,
       moment(new Date()),
       req.body.userId,
