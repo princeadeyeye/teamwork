@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/auth/v1/create-user', authCtrl.createUser)
 
 // user signin
-router.post('/auth/signin', authCtrl.signin)
+router.post('/auth/v1/signin', authCtrl.signin)
 
 // user sign out
 // router.get('auth/signout', authCtrl.signout)*/
