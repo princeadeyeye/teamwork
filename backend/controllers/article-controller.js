@@ -92,7 +92,7 @@ async function getArticle(req, res) {
 async function commentArticle (req, res) {
     const createCommentQuery = `
     INSERT INTO
-      articles(
+      comments(
         commentId,      
         comment,      
         createdOn,    
