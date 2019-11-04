@@ -50,18 +50,15 @@ const updateUser = (req, res, next) => {
 async function feeds(req, res) {
       const gifFeed = 'SELECT * FROM gifs ORDER BY gifId ASC';
       const articleFeed = 'SELECT * FROM articles ORDER BY articleId ASC';
-      const feedsQuery = ``
       try {
-        const { rows } = await pool.query(gifFeed);
         const { rows } = await pool.query(articleFeed);
         if (!rows) {
-          const { rows } = await pool.query(articleFeed);
+          const { rows } = await pool.query(gifFeed);
             if(!rows) {
                return res.status(404).json({'message': 'articles and gifs not found'});
             }
             return res.status(200).send(rows);
         }
-        const { rows } = await pool.query(articleFeed);
         return res.status(200).send(rows);
     } catch(error) {
         return res.status(400).send(error)

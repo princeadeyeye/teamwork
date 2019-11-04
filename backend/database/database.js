@@ -51,6 +51,8 @@ const gifTableQuery = ` CREATE TABLE IF NOT EXISTS gifs (
 	title 			VARCHAR(255) 	NOT NULL,
 	createdOn 		DATE			NOT NULL,
 	imageUrl		VARCHAR(255) 	NOT NULL,
+	userId			INT,
+	FOREIGN KEY (userId) REFERENCES users (userId),
 	PRIMARY KEY 	(gifId)
 )`
 
@@ -59,6 +61,7 @@ const articleTableQuery = ` CREATE TABLE IF NOT EXISTS articles (
 	article 			VARCHAR(255)  	NOT NULL,
 	title 				VARCHAR(255)	NOT NULL,
 	createdOn 			DATE			NOT NULL,
+	FOREIGN KEY (userId) REFERENCES users (userId),
 	PRIMARY KEY	(articleId)
 ); `
 

@@ -8,7 +8,8 @@ async function createGif (req, res) {
       gifs(
       gifId, 			
 		  title,
-		  imageUrl, 				
+		  imageUrl,
+      userId, 				
 		  createdOn				
         )
       VALUES($1, $2, $3, $4)
@@ -17,6 +18,7 @@ async function createGif (req, res) {
       DEFAULT,
       req.body.title,
       req.body.imageUrl,
+      req.body.userId,
       moment(new Date())
     ];
 

@@ -8,7 +8,8 @@ async function createArticle (req, res) {
       articles(
       	articleId, 			
 		    article,			
-		    title,		
+		    title,
+        userId,		
 		    createdOn				
         )
       VALUES($1, $2, $3, $4)
@@ -17,6 +18,7 @@ async function createArticle (req, res) {
       DEFAULT,
       req.body.article,
       req.body.title,
+      req.body.userId,
       moment(new Date())
     ];
 
