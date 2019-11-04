@@ -1,25 +1,23 @@
 const moment = require ('moment');
-const uuid = require ('uuid');
 const pool = require ('../database/database');
 const Helper = require ('../Helper');
 
 
   async function createUser(req, res) {
     if (!req.body.email || !req.body.password) {
-      return res.status(400).send({'message': 'Some values are missing'});
+      return res.status(400).json({'message': 'Some values are missing'});
     }
     if (!Helper.isValidEmail(req.body.email)) {
-      return res.status(400).send({ 'message': 'Please enter a valid email address' });
+      return res.status(400).json({ 'message': 'Please enter a valid email address' });
     }
     const hashPassword = Helper.hashPassword(req.body.password);
 
     const createQuery = `INSERT INTO
       users(
-        userId , first_name, last_name , email, password, jobRole, department, address )
-        VALUES($1, $2, $3, $4, $5, $6, $7, $8)
+       first_name, last_name , email, password, jobRole, department, address )
+        VALUES($1, $2, $3, $4, $5, $6, $7)
         returning *`;
         const values = [
-          DEFAULT,
           req.body.firstName,
           req.body.lastName,
           req.body.email,
@@ -31,9 +29,13 @@ const Helper = require ('../Helper');
 
     try {
       const { rows } = await pool.query(createQuery, values);
-      const token = Helper.generateToken(rows[0].userId);
-      const userId = req.body.userId;
-      return res.status(201).json({ "token": token, "userId": userId, "message": "User account successfully created" });
+      const userId = rows[0].userId
+      const token = Helper.generateToken(userId);
+      return res.status(201)
+                .json({ 
+                        message: "User account successfully created",
+                        token,
+                        userId:userId});
     } catch(error) {
       if (error.routine === '_bt_check_unique') {
         return res.status(400).json({ 'message': 'User with that EMAIL already exist' })

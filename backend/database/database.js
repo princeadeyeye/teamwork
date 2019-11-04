@@ -18,27 +18,25 @@ pool.on('connect', () => {
 
 //CREATING TABLES
 
-
-
  const userTableQuery = ` CREATE TABLE IF NOT EXISTS users (
-	    userId 		INT,
-	    first_name  VARCHAR(20)     NOT NULL,
-	    last_name   VARCHAR(20)     NOT NULL,
-	    email     	VARCHAR(250) 	NOT NULL,    
-	    jobRole 	VARCHAR(20) 	NOT NULL,
-	    department	VARCHAR(20) 	NOT NULL,
-	    address		VARCHAR(20) 	NOT NULL,
-	    PRIMARY KEY (userId),
-	    FOREIGN KEY (email) REFERENCES login (email)
+	    userId 		SERIAL,
+	    first_name  VARCHAR(250)     NOT NULL,
+	    last_name   VARCHAR(250)     NOT NULL,
+	    email     	VARCHAR(250) 	NOT NULL,
+	    password    VARCHAR(250) 	NOT NULL,     
+	    jobRole 	VARCHAR(250) 	NOT NULL,
+	    department	VARCHAR(250) 	NOT NULL,
+	    address		VARCHAR(250) 	NOT NULL,
+	    PRIMARY KEY (userId)
 ); `
 
 const commentTableQuery = ` CREATE TABLE IF NOT EXISTS comments (
-	commentId 		INT,
+	commentId 		SERIAL,
 	comment 		VARCHAR(250)	NOT NULL,
 	createdOn 		DATE			NOT	NULL,
-	articleId 		INT,
- 	userId 			INT,
- 	gifId 			INT,
+	articleId 		SERIAL,
+ 	userId 			SERIAL,
+ 	gifId 			SERIAL,
  	PRIMARY KEY (commentId),
  	FOREIGN KEY (userId) REFERENCES users (userId),
  	FOREIGN KEY	(gifId) REFERENCES gifs (gifId),
@@ -47,51 +45,26 @@ const commentTableQuery = ` CREATE TABLE IF NOT EXISTS comments (
 )`
 
 const gifTableQuery = ` CREATE TABLE IF NOT EXISTS gifs (
-	gifId 			INT,
+	gifId 			SERIAL,
 	title 			VARCHAR(255) 	NOT NULL,
 	createdOn 		DATE			NOT NULL,
 	imageUrl		VARCHAR(255) 	NOT NULL,
-	userId			INT,
+	userId			SERIAL,
 	FOREIGN KEY (userId) REFERENCES users (userId),
 	PRIMARY KEY 	(gifId)
 )`
 
 const articleTableQuery = ` CREATE TABLE IF NOT EXISTS articles (
-	articleId 			INT,
+	articleId 			SERIAL,
 	article 			VARCHAR(255)  	NOT NULL,
 	title 				VARCHAR(255)	NOT NULL,
 	createdOn 			DATE			NOT NULL,
+	userId 				SERIAL,
 	FOREIGN KEY (userId) REFERENCES users (userId),
 	PRIMARY KEY	(articleId)
 ); `
 
-const loginTableQuery = ` CREATE TABLE IF NOT EXISTS login (
-	email 				VARCHAR(255) 	NOT NULL,
-	hashed_password 	VARCHAR(255) 	NOT NULL,
-	loginOn				DATE			NOT NULL,
-	PRIMARY KEY (email)
-)`
 
-
-	pool.query(articleTableQuery)
-		.then((res) => {
-			console.log(res);
-			
-			})
-		.catch((err) => {
-			console.log(err);
-			
-		})
-		
-
-	pool.query(userTableQuery)
-		.then((res) => {
-			console.log(res);
-			
-			})
-		.catch((err) => {
-			console.log(err);
-		});
 		
 	pool.query(gifTableQuery)
 		.then((res) => {
@@ -103,7 +76,17 @@ const loginTableQuery = ` CREATE TABLE IF NOT EXISTS login (
 			
 		})
 
-	pool.query(commentTableQuery)
+	
+	pool.query(userTableQuery)
+		.then((res) => {
+			console.log(res);
+			
+			})
+		.catch((err) => {
+			console.log(err);
+		});
+
+	pool.query(articleTableQuery)
 		.then((res) => {
 			console.log(res);
 			
@@ -112,14 +95,14 @@ const loginTableQuery = ` CREATE TABLE IF NOT EXISTS login (
 			console.log(err);
 			
 		})
-
-	pool.query(loginTableQuery)
+		pool.query(commentTableQuery)
 		.then((res) => {
 			console.log(res);
 			
 			})
 		.catch((err) => {
 			console.log(err);
-		});
+			
+		})
 
 module.exports = pool

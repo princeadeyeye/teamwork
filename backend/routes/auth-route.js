@@ -5,7 +5,7 @@ const authCtrl = require('../controllers/auth-controller');
 const router = express.Router();
 
 // create a user
-router.post('/auth/create-user', authCtrl.createUser)
+router.post('/auth/v1/create-user', authCtrl.createUser)
 
 // user signin
 router.post('/auth/signin', authCtrl.signin)
