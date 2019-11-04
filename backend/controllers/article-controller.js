@@ -96,17 +96,15 @@ async function commentArticle (req, res) {
         commentId,      
         comment,      
         createdOn,    
-        articleId,
         userId, 
         gifId      
         )
-      VALUES($1, $2, $3, $4, $5, $6)
+      VALUES($1, $2, $3, $4, $5)
       returning *`;
     const values = [
       default,
       req.body.comment,
       moment(new Date()),
-      req.body.articleId,
       req.body.userId,
       req.body.gifId
     ];
