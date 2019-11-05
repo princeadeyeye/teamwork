@@ -36,9 +36,5 @@ const Helper = {
 	}
 }
 
-	 const requireSignin = expressJwt({
-   		secret: "MY_SECRET_KEY",
-   		userProperty: 'auth'
-  	})
 
 module.exports = Helper

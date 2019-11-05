@@ -1,6 +1,8 @@
 const moment = require ('moment');
 const pool = require ('../database/database');
 const Helper = require ('../Helper');
+const expressJwt = require('express-jwt')
+
 
 
   async function createUser(req, res) {
@@ -66,6 +68,20 @@ const Helper = require ('../Helper');
     }
 
   }
+const hasAuthorization = (req, res, next) => {
+  const authorized = req.profile && req.auth && req.profile._id == req.auth._id
+  if (!(authorized)) {
+    return res.status('403').json({
+      error: "User is not authorized"
+    })
+  }
+  next()
+}
+
+     const requireSignin = expressJwt({
+      secret: "MY_SECRET_KEY",
+      userProperty: 'auth'
+    })
 
 
-module.exports = { createUser, signin }
+module.exports = { createUser, signin, requireSignin }

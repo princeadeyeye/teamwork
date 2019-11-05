@@ -2,20 +2,19 @@ const pool = require('../database/database')
 const uuid = require ('uuid')
 const moment = require ('moment')
 
+
 async function createArticle (req, res) {
     const createQuery = `
     INSERT INTO
       articles(
-      	articleId, 			
 		    article,			
 		    title,
-        userId,		
+       		 userId,		
 		    createdOn				
         )
       VALUES($1, $2, $3, $4)
       returning *`;
     const values = [
-      DEFAULT,
       req.body.article,
       req.body.title,
       req.body.userId,
@@ -24,9 +23,9 @@ async function createArticle (req, res) {
 
     try {
       const { rows } = await pool.query(createQuery, values);
-        return res.status(201).send(rows[0]);
+        return res.status(201).json(rows[0]);
     } catch(error) {
-      return res.status(400).send(error);
+      return res.status(400).json(error);
     }
   }
 
@@ -118,6 +117,7 @@ async function commentArticle (req, res) {
       return res.status(400).send(error);
     }
   }
+
 
 
 
