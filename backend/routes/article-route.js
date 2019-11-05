@@ -8,7 +8,7 @@ const router = express.Router();
  router.post('/api/v2/articles/', authCtrl.requireSignin, articleCtrl.createArticle)
 
 // update article
-router.patch('/api/v1/articles/:articleId', authCtrl.requireSignin, articleCtrl.updateArticle)
+router.patch('/api/v2/articles/:articleId', authCtrl.requireSignin, articleCtrl.updateArticle)
 
 // delete article 
 router.delete('/api/v1/articles/:articleId', authCtrl.requireSignin, articleCtrl.removeArticle)

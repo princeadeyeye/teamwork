@@ -32,23 +32,28 @@ async function createArticle (req, res) {
 async function updateArticle(req, res) {
     const findOneQuery = 'SELECT * FROM articles WHERE articleId=$1';
     const updateOneQuery =`UPDATE articles
-      SET article=$1,title=$2,createdOn=$3
+      SET title=$1,article=$2,createdOn=$3
       WHERE articleId=$4 returning *`;
     try {
       const { rows } = await pool.query(findOneQuery, [req.params.articleId]);
       if(!rows[0]) {
-        return res.status(404).send({'message': 'article not found'});
+        return res.status(404).json({'message': 'article not found'});
       }
       const values = [
-        req.body.article || rows[0].article,
         req.body.title || rows[0].title,
+        req.body.article || rows[0].article,
         moment(new Date()),
         req.params.articleId,
       ];
       const response = await pool.query(updateOneQuery, values);
-      return res.status(200).send(response.rows[0]);
+      return res.status(200)
+                .json({
+                  "message": "Article successfully updated",
+                  "title": response.rows[0].title,
+                  "article": response.rows[0].article
+                });
     } catch(err) {
-      return res.status(400).send(err);
+      return res.status(400).json(err);
     }
   }
 
