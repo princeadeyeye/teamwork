@@ -20,6 +20,6 @@ router.delete('/api/v2/articles/:articleId', authCtrl.requireSignin, articleCtrl
  router.get('/api/v2/articles/', authCtrl.requireSignin, articleCtrl.listArticles)
 
 // comment on article
- router.put('/api/v1/articles/:articleId/comment', authCtrl.requireSignin, articleCtrl.commentArticle)
+ router.put('/api/v2/articles/:articleId/comment', authCtrl.requireSignin, articleCtrl.commentArticle)
 
 module.exports = router;

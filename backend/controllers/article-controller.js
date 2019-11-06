@@ -9,7 +9,7 @@ async function createArticle (req, res) {
       articles(
 		    article,			
 		    title,
-       	userId,		
+       	authorid,		
 		    createdOn				
         )
       VALUES($1, $2, $3, $4)
@@ -17,7 +17,7 @@ async function createArticle (req, res) {
     const values = [
       req.body.article,
       req.body.title,
-      req.body.userId,
+      req.body.authorid,
       moment(new Date())
     ];
 
@@ -98,7 +98,7 @@ async function getArticle(req, res) {
 async function commentArticle (req, res) {
     const createCommentQuery = `
     INSERT INTO
-      comments(
+      a_comments(
         comment,
         title, 
         article,     
@@ -109,15 +109,15 @@ async function commentArticle (req, res) {
     const values = [
       req.body.comment,
       req.body.title,
-      req.body.Article,
+      req.body.article,
       moment(new Date())
     ];
 
     try {
       const { rows } = await pool.query(createCommentQuery, values);
-        return res.status(201).send(rows[0]);
+        return res.status(201).json(rows[0]);
     } catch(error) {
-      return res.status(400).send(error);
+      return res.status(400).json(error);
     }
   }
 
