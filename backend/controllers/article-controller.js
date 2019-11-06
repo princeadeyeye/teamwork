@@ -9,7 +9,7 @@ async function createArticle (req, res) {
       articles(
 		    article,			
 		    title,
-       		 userId,		
+       	userId,		
 		    createdOn				
         )
       VALUES($1, $2, $3, $4)
@@ -99,20 +99,18 @@ async function commentArticle (req, res) {
     const createCommentQuery = `
     INSERT INTO
       comments(
-        commentId,      
-        comment,      
-        createdOn,    
-        userId, 
-        gifId      
+        comment,
+        title, 
+        article,     
+        createdOn
         )
-      VALUES($1, $2, $3, $4, $5)
+      VALUES($1, $2, $3, $4)
       returning *`;
     const values = [
-      DEFAULT,
       req.body.comment,
-      moment(new Date()),
-      req.body.userId,
-      req.body.gifId
+      req.body.title,
+      req.body.Article,
+      moment(new Date())
     ];
 
     try {
