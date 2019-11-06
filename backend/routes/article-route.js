@@ -11,13 +11,13 @@ const router = express.Router();
 router.patch('/api/v2/articles/:articleId', authCtrl.requireSignin, articleCtrl.updateArticle)
 
 // delete article 
-router.delete('/api/v1/articles/:articleId', authCtrl.requireSignin, articleCtrl.removeArticle)
+router.delete('/api/v2/articles/:articleId', authCtrl.requireSignin, articleCtrl.removeArticle)
 
  // view specific article
- router.get('/api/v1/articles/:articleId', authCtrl.requireSignin, articleCtrl.getArticle)
+ router.get('/api/v2/articles/:articleId', authCtrl.requireSignin, articleCtrl.getArticle)
 
 // view all articles
- router.get('/api/v1/articles/', authCtrl.requireSignin, articleCtrl.listArticles)
+ router.get('/api/v2/articles/', authCtrl.requireSignin, articleCtrl.listArticles)
 
 // comment on article
  router.put('/api/v1/articles/:articleId/comment', authCtrl.requireSignin, articleCtrl.commentArticle)

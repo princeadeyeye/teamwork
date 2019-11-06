@@ -87,11 +87,11 @@ async function getArticle(req, res) {
     try{
         const { rows } = await pool.query(deleteQuery, [req.params.articleId]);
           if(!rows[0]) {
-            return res.status(400).send({'message': 'Article not found'})
+            return res.status(400).json({'message': 'Article not found'})
           }
-          return res.status(204).send({'message': 'Article Deleted'})
+          return res.status(204).json({message: 'Article Successfully deleted'})
       } catch(error) {
-      return res.status(404).send(error)
+      return res.status(404).json(error)
     }
   }
 
