@@ -3,7 +3,7 @@ const { Pool } = require('pg');
  require('dotenv').config();
 
 // dotenv.config();
- const connectionString = 'postgresql://postgres:adeyeye@localhost:5432/employee'
+ const connectionString = 'postgresql://postgres:adeyeye@localhost:5432/employee?sslmode=disable.'
 
 
 
@@ -18,21 +18,8 @@ pool.on('connect', () => {
 
 //CREATING TABLES
 
- const employeeTableQuery = ` CREATE TABLE IF NOT EXISTS employee (
-	    userId 		SERIAL,
-	    first_name  VARCHAR(250)     NOT NULL,
-	    last_name   VARCHAR(250)     NOT NULL,
-	    email     	VARCHAR(250) 	NOT NULL,
-	    password    VARCHAR(250) 	NOT NULL,     
-	    jobRole 	VARCHAR(250) 	NOT NULL,
-	    department	VARCHAR(250) 	NOT NULL,
-	    address		VARCHAR(250) 	NOT NULL,
-	    PRIMARY KEY (userId)
-); `
-
-
  const adminTableQuery = ` CREATE TABLE IF NOT EXISTS admin (
-	    userId 		SERIAL,
+	    userid 		SERIAL,
 	    first_name  VARCHAR(250)     NOT NULL,
 	    last_name   VARCHAR(250)     NOT NULL,
 	    email     	VARCHAR(250) 	NOT NULL,
@@ -42,53 +29,62 @@ pool.on('connect', () => {
 	    address		VARCHAR(250) 	NOT NULL,
 	    PRIMARY KEY (userId)
 ); `
+
+ const employeeTableQuery = ` CREATE TABLE IF NOT EXISTS employee (
+	    userid 		SERIAL,
+	    first_name  VARCHAR(250)     NOT NULL,
+	    last_name   VARCHAR(250)     NOT NULL,
+	    email     	VARCHAR(250) 	NOT NULL,
+	    password    VARCHAR(250) 	NOT NULL,     
+	    jobRole 	VARCHAR(250) 	NOT NULL,
+	    department	VARCHAR(250) 	NOT NULL,
+	    address		VARCHAR(250) 	NOT NULL,
+	    PRIMARY KEY (userid)
+); `
+
 
 const articleTableQuery = ` CREATE TABLE IF NOT EXISTS articles (
-	articleId 			SERIAL,
+	articleid 			SERIAL,
 	article 			VARCHAR(255)  	NOT NULL,
 	title 				VARCHAR(255)	NOT NULL,
 	createdOn 			DATE			NOT NULL,
-	userId 				SERIAL,
-	FOREIGN KEY (userId) REFERENCES employeeTableQuery (userId),
+	authorid 			SERIAL,
+	FOREIGN KEY (authorid) REFERENCES employee (userid),
 	PRIMARY KEY	(article, title)
 ); `
 
 const articleCommentTableQuery = ` CREATE TABLE IF NOT EXISTS a_comments (
-	commentId 		SERIAL,
+	commentid 		SERIAL,
 	comment 		VARCHAR(250)	NOT NULL,
 	createdOn 		DATE			NOT	NULL,
 	title			VARCHAR(255)  	NOT NULL,
 	article 		VARCHAR(255)	NOT NULL,
- 	PRIMARY KEY (commentId),
- 	FOREIGN KEY (title) REFERENCES articles (title),
- 	FOREIGN KEY	(article) REFERENCES articles (article)
-
+ 	PRIMARY KEY (commentid),
+ 	FOREIGN KEY (title, article) REFERENCES articles (title, article)
 );`
 
 const gifTableQuery = ` CREATE TABLE IF NOT EXISTS gifs (
-	gifId 			SERIAL,
+	gifid 			SERIAL,
 	title 			VARCHAR(255) 	NOT NULL,
 	createdOn 		DATE			NOT NULL,
 	imageUrl		VARCHAR(255) 	NOT NULL,
-	userId			SERIAL,
-	FOREIGN KEY (userId) REFERENCES employeeTableQuery (userId),
+	authorid			SERIAL,
+	FOREIGN KEY (authorid) REFERENCES employee (userid),
 	PRIMARY KEY 	(title)
 )`
 
 
 const gifCommentTableQuery = ` CREATE TABLE IF NOT EXISTS g_comments (
-	commentId 		SERIAL,
+	commentid 		SERIAL,
 	comment 		VARCHAR(250)	NOT NULL,
 	createdOn 		DATE			NOT	NULL,
 	title			VARCHAR(255)  	NOT NULL,
- 	PRIMARY KEY (commentId),
+ 	PRIMARY KEY (commentid),
  	FOREIGN KEY (title) REFERENCES gifs (title)
 
 )`
 
 
-
-	
 
 	
 	pool.query(employeeTableQuery)
@@ -109,15 +105,6 @@ const gifCommentTableQuery = ` CREATE TABLE IF NOT EXISTS g_comments (
 			console.log(err);
 		});
 
-		pool.query(articleTableQuery)
-		.then((res) => {
-			console.log(res);
-			
-			})
-		.catch((err) => {
-			console.log(err);
-			
-		})
 		pool.query(articleCommentTableQuery)
 		.then((res) => {
 			console.log(res);
@@ -137,6 +124,17 @@ const gifCommentTableQuery = ` CREATE TABLE IF NOT EXISTS g_comments (
 			
 		})
 		pool.query(gifCommentTableQuery)
+		.then((res) => {
+			console.log(res);
+			
+			})
+		.catch((err) => {
+			console.log(err);
+			
+		})
+
+
+		pool.query(articleTableQuery)
 		.then((res) => {
 			console.log(res);
 			
