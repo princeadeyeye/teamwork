@@ -6,7 +6,7 @@ const base_url = 'http://localhost:5000/'
 describe("Gif Route", function() {
 
 
-  describe("Post Gif /", function() {
+  describe("Post Gif Route", function() {
     it("returns status code 201", function(done) {
       request.post(base_url, function(error, response, body) {
         expect(response.statusCode).toBe(201);
@@ -16,7 +16,7 @@ describe("Gif Route", function() {
 
   });
 
-describe("Update Gif /", function() {
+describe("Update Gif Route", function() {
     it("returns status code 200", function(done) {
       request.patch(base_url, function(error, response, body) {
         expect(response.statusCode).toBe(200);
@@ -25,7 +25,7 @@ describe("Update Gif /", function() {
     });
   });
 
-describe("Delete Gif /", function() {
+describe("Delete Gif Route", function() {
     it("returns status code 204", function(done) {
       request.delete(base_url, function(error, response, body) {
         expect(response.statusCode).toBe(204);
@@ -34,7 +34,7 @@ describe("Delete Gif /", function() {
     });
   });
 
-describe("Get Gif /", function() {
+describe("Get Gif Route", function() {
     it("returns status code 200", function(done) {
       request.get(base_url, function(error, response, body) {
         expect(response.statusCode).toBe(200);
