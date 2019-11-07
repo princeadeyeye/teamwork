@@ -25,4 +25,14 @@ describe("Update Article /", function() {
     });
   });
 
+describe("Delete Article /", function() {
+    it("returns status code 204", function(done) {
+      request.delete(base_url, function(error, response, body) {
+        expect(response.statusCode).toBe(204);
+        done();
+      });
+    });
+  });
+
+
 })
