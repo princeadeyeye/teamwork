@@ -16,6 +16,13 @@ describe("Article Post", function() {
 
   });
 
+describe("Update Article /", function() {
+    it("returns status code 200", function(done) {
+      request.patch(base_url, function(error, response, body) {
+        expect(response.statusCode).toBe(200);
+        done();
+      });
+    });
+  });
 
-  
 })
