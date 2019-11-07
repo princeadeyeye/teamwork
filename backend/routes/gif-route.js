@@ -7,9 +7,6 @@ const router = express.Router();
 //write & share gif
 router.post('/api/v2/gifs/', authCtrl.requireSignin, gifCtrl.createGif)
 
-// edit gif
-router.put('api/v2/gifs/:gifId', authCtrl.requireSignin, gifCtrl.updateGif)
-
 // delete gif 
 router.delete('/api/v2/gifs/:gifId', authCtrl.requireSignin, gifCtrl.removeGif)
 

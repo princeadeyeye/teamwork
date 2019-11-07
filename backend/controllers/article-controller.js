@@ -70,7 +70,7 @@ async function updateArticle(req, res) {
       return res.status(400).json(err);
     }
   }
-
+//to be comment out
 async function listArticles(req, res) {
     const texts = 'SELECT * FROM articles ORDER BY articleId ASC';
     try {
@@ -84,7 +84,9 @@ async function listArticles(req, res) {
     }
   }
 async function getArticle(req, res) {
-    const text = 'SELECT * FROM articles WHERE articleId = $1';
+    const text = `SELECT * FROM articles a, a_comments b
+                    WHERE a.title = b.title
+                    AND articleId = $1`;
     try {
       const { rows } = await pool.query(text, [req.params.articleId]);
       if (!rows[0]) {
