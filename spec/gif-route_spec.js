@@ -3,10 +3,10 @@ const server = require('../backend/server')
 const base_url = 'http://localhost:5000/'
 
 
-describe("Article Route", function() {
+describe("Gif Route", function() {
 
 
-  describe("Post Article /", function() {
+  describe("Post Gif /", function() {
     it("returns status code 201", function(done) {
       request.post(base_url, function(error, response, body) {
         expect(response.statusCode).toBe(201);
@@ -16,7 +16,7 @@ describe("Article Route", function() {
 
   });
 
-describe("Update Article /", function() {
+describe("Update Gif /", function() {
     it("returns status code 200", function(done) {
       request.patch(base_url, function(error, response, body) {
         expect(response.statusCode).toBe(200);
@@ -25,7 +25,7 @@ describe("Update Article /", function() {
     });
   });
 
-describe("Delete Article /", function() {
+describe("Delete Gif /", function() {
     it("returns status code 204", function(done) {
       request.delete(base_url, function(error, response, body) {
         expect(response.statusCode).toBe(204);
@@ -34,7 +34,7 @@ describe("Delete Article /", function() {
     });
   });
 
-describe("Get Article /", function() {
+describe("Get Gif /", function() {
     it("returns status code 200", function(done) {
       request.get(base_url, function(error, response, body) {
         expect(response.statusCode).toBe(200);
