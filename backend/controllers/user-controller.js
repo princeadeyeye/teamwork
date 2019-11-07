@@ -36,6 +36,19 @@ const updateUser = (req, res, next) => {
     }
   }
 
+async function readUser(req, res, next) {
+    const text = 'SELECT * FROM users WHERE userid = $1';
+    try {
+      const { rows } = await pool.query(text, [req.params.articleId]);
+      if (!rows[0]) {
+        return res.status(404).json({'message': 'article not found'});
+      }
+      return res.status(200).json(rows[0]);
+ 
+    } catch(error) {
+      return res.status(400).send(error)
+    }
+  }
 async function feeds(req, res) {
       const gifFeed = 'SELECT * FROM gifs ORDER BY gifId ASC';
       const articleFeed = 'SELECT * FROM articles ORDER BY articleId ASC';

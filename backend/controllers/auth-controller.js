@@ -76,7 +76,7 @@ const expressJwt = require('express-jwt')
       if (!rows[0]) {
         return res.status(404).json({'message': 'article not found'});
       }
-      const req.profile = rows[0];
+      return req.profile = rows[0];
         next();
     } catch(error) {
       return res.status(400).send(error)

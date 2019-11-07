@@ -1,5 +1,6 @@
 const http = require('http');
 const app = require ('./app');
+const exports = module.exports = {};
 
 
 const normalizePort = val => {
@@ -44,5 +45,10 @@ server.on('listening', () => {
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
   console.log('Listening on ' + bind);
 });
+
+
+exports.closeServer = function() {
+  server.close();
+}:
 
 server.listen(port);

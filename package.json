@@ -4,7 +4,8 @@
   "description": "Teamwork",
   "main": "server.js",
   "scripts": {
-    "test": "nodemon ./backend/server"
+    "start": "nodemon ./backend/server",
+    "test": ""
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,10 @@
   "homepage": "https://github.com/princeadeyeye/teamwork#readme",
   "devDependencies": {
     "eslint": "^6.6.0",
-    "eslint-plugin-react": "^7.16.0"
+    "eslint-plugin-react": "^7.16.0",
+    "jasmine-node": "^3.0.0"
+  },
+  "dependencies": {
+    "request": "^2.88.0"
   }
 }
