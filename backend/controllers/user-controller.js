@@ -12,17 +12,6 @@ const listUsers =  (req, res, next) => {
 
 }
 
-const readUser = (req, res, next) => {
-	const id = req.params.userId;
-	pool.query('SELECT * FROM users WHERE userId = $1', [id],   (err, result) => {
-        if (err) {
-            console.log(err);
-            res.status(400).send(err);
-        }
-        res.status(200).json(result);
-         
-    });
-}
 
 const updateUser = (req, res, next) => {
 	const user = [req.body.name, req.body.email, req.params.userId]

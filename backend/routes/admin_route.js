@@ -5,7 +5,7 @@ const adminCtrl = require('../controllers/admin-controller');
 const router = express.Router();
 
 // create a user
-router.post('/admin/v1/create-admin', adminCtrl.createUser)
+router.post('/admin/v1/create-admin', adminCtrl.createAdmin)
 
 // user signin
 router.post('/admin/v1/signin', adminCtrl.signin)

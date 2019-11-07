@@ -19,4 +19,7 @@ router.delete('api/v1/users/:userId', userCtrl.removeUser)
 // view all gif and articles
 router.get('/api/v1/feed/', userCtrl.feeds)
 
+
+
+
 module.exports = router;

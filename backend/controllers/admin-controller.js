@@ -5,7 +5,7 @@ const expressJwt = require('express-jwt')
 
 
 
-  async function createUser(req, res) {
+  async function createAdmin(req, res) {
     if (!req.body.email || !req.body.password) {
       return res.status(400).json({'message': 'Some values are missing'});
     }
@@ -34,15 +34,16 @@ const expressJwt = require('express-jwt')
       const id = rows[0].userid
       const token = Helper.generateToken(id);
       return res.status(201)
-                .json({ message: "User account successfully created",
+                .json({ message: "Admin account successfully created",
                         token, id });
     } catch(error) {
       if (error.routine === '_bt_check_unique') {
-        return res.status(400).json({ 'message': 'User with that EMAIL already exist' })
+        return res.status(400).json({ 'message': 'Admin with that EMAIL already exist' })
       }
       return res.status(400).json(error);
     }
   }
+
 
   async function signin(req, res) {
     if (!req.body.email || !req.body.password) {
@@ -68,36 +69,20 @@ const expressJwt = require('express-jwt')
     }
 
   }
-
-  async function userByID(req, res, next) {
-    const text = 'SELECT * FROM users WHERE userid = $1';
-    try {
-      const { rows } = await pool.query(text, [req.params.articleId]);
-      if (!rows[0]) {
-        return res.status(404).json({'message': 'article not found'});
-      }
-      const req.profile = rows[0];
-        next();
-    } catch(error) {
-      return res.status(400).send(error)
-    }
-  }
-
-
 const hasAuthorization = (req, res, next) => {
-  const authorized = req.profile && req.auth && req.profile._id == req.auth._id
+  const authorized = req.profile && req.auth && req.profile._userid == req.auth._userid
   if (!(authorized)) {
     return res.status('403').json({
-      error: "User is not authorized"
+      error: "Admin is not authorized"
     })
   }
   next()
 }
 
-     const requireSignin = expressJwt({
+const requireSignin = expressJwt({
       secret: "MY_SECRET_KEY",
       userProperty: 'auth'
     })
 
 
-module.exports = { createUser, signin, requireSignin }
+module.exports = { createAdmin, signin, requireSignin, hasAuthorization }
