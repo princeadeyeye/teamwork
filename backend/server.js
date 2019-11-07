@@ -1,6 +1,5 @@
 const http = require('http');
 const app = require ('./app');
-const exports = module.exports = {};
 
 
 const normalizePort = val => {
@@ -47,8 +46,9 @@ server.on('listening', () => {
 });
 
 
-exports.closeServer = function() {
+const closeServer = () => {
   server.close();
 }:
 
+module.exports = closeServer
 server.listen(port);
