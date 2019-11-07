@@ -48,7 +48,7 @@ server.on('listening', () => {
 
 const closeServer = () => {
   server.close();
-}:
+}
 
 module.exports = closeServer
 server.listen(port);

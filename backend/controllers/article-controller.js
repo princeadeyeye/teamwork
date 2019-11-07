@@ -29,6 +29,20 @@ async function createArticle (req, res) {
     }
   }
 
+    async function postByID(req, res, next) {
+      const text = 'SELECT * FROM articles WHERE articleId = $1';
+      try {
+        const { rows } = await pool.query(text, [req.params.articleId]);
+        if (!rows[0]) {
+        return res.status(404).json({'message': 'article not found'});
+      }
+      return req.profile = rows[0];
+        next();
+    } catch(error) {
+      return res.status(400).send(error)
+    }
+  }
+
 async function updateArticle(req, res) {
     const findOneQuery = 'SELECT * FROM articles WHERE articleId=$1';
     const updateOneQuery =`UPDATE articles
@@ -121,7 +135,18 @@ async function commentArticle (req, res) {
     }
   }
 
+  const hasAuthorization = (req, res, next) => {
+    const authorized = req.profile && req.auth && req.profile._id == req.auth._id
+    if (!(authorized)) {
+      return res.status('403').json({
+        error: "User is not authorized"
+      })
+    }
+    next()
+}
 
 
 
- module.exports = {createArticle, updateArticle, getArticle, listArticles, removeArticle, commentArticle}
+
+
+ module.exports = {createArticle, updateArticle, getArticle, listArticles, removeArticle, commentArticle, hasAuthorization, postByID}
