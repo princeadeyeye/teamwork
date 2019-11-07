@@ -1,11 +1,13 @@
 const express = require('express');
 const gifCtrl = require('../controllers/gif-controller');
 const authCtrl = require('../controllers/auth-controller')
+const upload = require('../../multerConfig.js');
+
 
 const router = express.Router();
 
 //write & share gif
-router.post('/api/v2/gifs/', authCtrl.requireSignin, gifCtrl.createGif)
+router.post('/api/v2/gifs/create-gif', upload.any(), authCtrl.requireSignin, gifCtrl.createGif)
 
 // delete gif 
 router.delete('/api/v2/gifs/:gifId', authCtrl.requireSignin, gifCtrl.removeGif)

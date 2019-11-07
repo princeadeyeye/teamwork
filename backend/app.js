@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser')
 const compress = require('compression')
 const helmet = require('helmet')
 const cors = require('cors')
+const path = require('path')
 
 
 // USER ROUTES
@@ -13,8 +14,13 @@ const articleRoute = require('./routes/article-route')
 const gifRoute = require('./routes/gif-route')
 const adminRoute = require('./routes/admin-route')
 
+
 // express
 const app = express();
+
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static('uploads'));
 
 // MIDDLEWARE
 app.use(bodyParser.json())
@@ -29,7 +35,7 @@ app.use(cors({credentials: true, origin: 'http://localhost:5000'}));
 app.use('/', userRoute)
 app.use('/', authRoute)
 app.use('/', articleRoute)
-app.use('/', gifRoute)
+app.use('/uploads', gifRoute)
 app.use('/', adminRoute)
 
 

@@ -18,7 +18,7 @@ pool.on('connect', () => {
 
 //CREATING TABLES
 
- const adminTableQuery = ` CREATE TABLE IF NOT EXISTS adminv1 (
+ const adminTableQuery = ` CREATE TABLE IF NOT EXISTS admin (
 	    userid 		SERIAL,
 	    first_name  VARCHAR(250)     NOT NULL,
 	    last_name   VARCHAR(250)     NOT NULL,
@@ -30,7 +30,7 @@ pool.on('connect', () => {
 	    PRIMARY KEY (userId)
 ); `
 
- const employeeTableQuery = ` CREATE TABLE IF NOT EXISTS employeev1 (
+ const employeeTableQuery = ` CREATE TABLE IF NOT EXISTS employee (
 	    userid 		SERIAL,
 	    first_name  VARCHAR(250)     NOT NULL,
 	    last_name   VARCHAR(250)     NOT NULL,
@@ -43,44 +43,44 @@ pool.on('connect', () => {
 ); `
 
 
-const articleTableQuery = ` CREATE TABLE IF NOT EXISTS articlesv1 (
+const articleTableQuery = ` CREATE TABLE IF NOT EXISTS articles (
 	articleid 			SERIAL,
 	article 			VARCHAR(255)  	NOT NULL,
 	title 				VARCHAR(255)	NOT NULL,
 	createdOn 			DATE			NOT NULL,
 	userid 			SERIAL,
-	FOREIGN KEY (userid) REFERENCES employeev1 (userid),
+	FOREIGN KEY (userid) REFERENCES employee (userid),
 	PRIMARY KEY	(article, title)
 ); `
 
-const articleCommentTableQuery = ` CREATE TABLE IF NOT EXISTS a_commentsv1 (
+const articleCommentTableQuery = ` CREATE TABLE IF NOT EXISTS a_comments (
 	commentid 		SERIAL,
 	comment 		VARCHAR(250)	NOT NULL,
 	createdOn 		DATE			NOT	NULL,
 	title			VARCHAR(255)  	NOT NULL,
 	article 		VARCHAR(255)	NOT NULL,
  	PRIMARY KEY (commentid),
- 	FOREIGN KEY (title, article) REFERENCES articlesv1 (title, article)
+ 	FOREIGN KEY (title, article) REFERENCES articles (title, article)
 );`
 
-const gifTableQuery = ` CREATE TABLE IF NOT EXISTS gifsv1 (
+const gifTableQuery = ` CREATE TABLE IF NOT EXISTS gifs (
 	gifid 			SERIAL,
 	title 			VARCHAR(255) 	NOT NULL,
 	createdOn 		DATE			NOT NULL,
 	imageUrl		VARCHAR(255) 	NOT NULL,
 	userid			SERIAL,
-	FOREIGN KEY (userid) REFERENCES employeev1 (userid),
+	FOREIGN KEY (userid) REFERENCES employee (userid),
 	PRIMARY KEY 	(title)
 )`
 
 
-const gifCommentTableQuery = ` CREATE TABLE IF NOT EXISTS g_commentsv1 (
+const gifCommentTableQuery = ` CREATE TABLE IF NOT EXISTS g_comments (
 	commentid 		SERIAL,
 	comment 		VARCHAR(250)	NOT NULL,
 	createdOn 		DATE			NOT	NULL,
 	title			VARCHAR(255)  	NOT NULL,
  	PRIMARY KEY (commentid),
- 	FOREIGN KEY (title) REFERENCES gifsv1 (title)
+ 	FOREIGN KEY (title) REFERENCES gifs (title)
 
 )`
 
