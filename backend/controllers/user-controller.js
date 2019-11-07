@@ -50,16 +50,13 @@ async function readUser(req, res, next) {
     }
   }
 async function feeds(req, res) {
-      const gifFeed = 'SELECT * FROM gifs ORDER BY gifId ASC';
-      const articleFeed = 'SELECT * FROM articles ORDER BY articleId ASC';
+      const feedQuery = `SELECT * FROM articles a, gifs g
+                          ORDER BY a.articleid, g.gifid ASC
+                          WHERE a.authorid = g.authorid`;
       try {
-        const { rows } = await pool.query(articleFeed);
+        const { rows } = await pool.query(feedQuery);
         if (!rows) {
-          const { rows } = await pool.query(gifFeed);
-            if(!rows) {
-               return res.status(404).json({'message': 'articles and gifs not found'});
-            }
-            return res.status(200).send(rows);
+          return res.status(404).json(error)
         }
         return res.status(200).send(rows);
     } catch(error) {
