@@ -11,7 +11,7 @@ const userRoute = require('./routes/user-route')
 const authRoute = require('./routes/auth-route')
 const articleRoute = require('./routes/article-route')
 const gifRoute = require('./routes/gif-route')
-
+const adminRoute = require('./routes/admin-route')
 
 // express
 const app = express();
@@ -30,6 +30,7 @@ app.use('/', userRoute)
 app.use('/', authRoute)
 app.use('/', articleRoute)
 app.use('/', gifRoute)
+app.use('/', adminRoute)
 
 
 

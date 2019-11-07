@@ -1,22 +1,21 @@
 const pool = require('../database/database')
-const uuid = require ('uuid')
 const moment = require ('moment')
 
 
 async function createArticle (req, res) {
     const createQuery = `
     INSERT INTO
-      articles(
+      articlesv1(
+        title,
 		    article,			
-		    title,
        	authorid,		
 		    createdOn				
         )
       VALUES($1, $2, $3, $4)
       returning *`;
     const values = [
-      req.body.article,
       req.body.title,
+      req.body.article,
       req.body.authorid,
       moment(new Date())
     ];
@@ -30,7 +29,7 @@ async function createArticle (req, res) {
   }
 
     async function postByID(req, res, next) {
-      const text = 'SELECT * FROM articles WHERE articleId = $1';
+      const text = 'SELECT * FROM articlesv1 WHERE articleId = $1';
       try {
         const { rows } = await pool.query(text, [req.params.articleId]);
         if (!rows[0]) {
@@ -44,8 +43,8 @@ async function createArticle (req, res) {
   }
 
 async function updateArticle(req, res) {
-    const findOneQuery = 'SELECT * FROM articles WHERE articleId=$1';
-    const updateOneQuery =`UPDATE articles
+    const findOneQuery = 'SELECT * FROM articlesv1 WHERE articleId=$1';
+    const updateOneQuery =`UPDATE articlesv1
       SET title=$1,article=$2,createdOn=$3
       WHERE articleId=$4 returning *`;
     try {
@@ -72,7 +71,7 @@ async function updateArticle(req, res) {
   }
 //to be comment out
 async function listArticles(req, res) {
-    const texts = 'SELECT * FROM articles ORDER BY articleId ASC';
+    const texts = 'SELECT * FROM articlesv1 ORDER BY articleId ASC';
     try {
       const { rows } = await pool.query(texts);
       if (!rows) {
@@ -84,7 +83,7 @@ async function listArticles(req, res) {
     }
   }
 async function getArticle(req, res) {
-    const text = `SELECT * FROM articles a, a_comments b
+    const text = `SELECT * FROM articlesv1 a, a_comments b
                     WHERE a.title = b.title
                     AND articleId = $1`;
     try {
@@ -99,7 +98,7 @@ async function getArticle(req, res) {
   }
 
   async function removeArticle(req, res, next) {
-    const deleteQuery = `DELETE FROM articles WHERE articleId=$1 RETURNING *`;
+    const deleteQuery = `DELETE FROM articlesv1 WHERE articleId=$1 RETURNING *`;
     try{
         const { rows } = await pool.query(deleteQuery, [req.params.articleId]);
           if(!rows[0]) {
