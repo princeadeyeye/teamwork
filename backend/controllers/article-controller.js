@@ -1,14 +1,17 @@
 const pool = require('../database/database')
 const moment = require ('moment')
+const expressJwt = require('express-jwt')
+const jwt = require ('jsonwebtoken')
+
 
 
 async function createArticle (req, res) {
     const createQuery = `
     INSERT INTO
-      articlesv1(
+      articles(
         title,
 		    article,			
-       	authorid,		
+       	userid,		
 		    createdOn				
         )
       VALUES($1, $2, $3, $4)
@@ -16,7 +19,7 @@ async function createArticle (req, res) {
     const values = [
       req.body.title,
       req.body.article,
-      req.body.authorid,
+      req.body.userid,
       moment(new Date())
     ];
 
@@ -28,35 +31,22 @@ async function createArticle (req, res) {
     }
   }
 
-    async function postByID(req, res, next) {
-      const text = 'SELECT * FROM articlesv1 WHERE articleId = $1';
-      try {
-        const { rows } = await pool.query(text, [req.params.articleId]);
-        if (!rows[0]) {
-        return res.status(404).json({'message': 'article not found'});
-      }
-      return req.profile = rows[0];
-        next();
-    } catch(error) {
-      return res.status(400).send(error)
-    }
-  }
-
 async function updateArticle(req, res) {
-    const findOneQuery = 'SELECT * FROM articlesv1 WHERE articleId=$1';
-    const updateOneQuery =`UPDATE articlesv1
-      SET title=$1,article=$2,createdOn=$3
-      WHERE articleId=$4 returning *`;
+    const findOneQuery = 'SELECT * FROM articles WHERE articleid=$1';
+    const updateOneQuery =`UPDATE articles
+      SET title=$1,article=$2, userid=$3, createdOn=$4
+      WHERE articleid=$5 returning *`;
     try {
-      const { rows } = await pool.query(findOneQuery, [req.params.articleId]);
+      const { rows } = await pool.query(findOneQuery, [req.params.id]);
       if(!rows[0]) {
         return res.status(404).json({'message': 'article not found'});
       }
       const values = [
         req.body.title || rows[0].title,
         req.body.article || rows[0].article,
+        req.body.userid || rows[0].userid,
         moment(new Date()),
-        req.params.articleId,
+        req.params.id
       ];
       const response = await pool.query(updateOneQuery, values);
       return res.status(200)
@@ -69,38 +59,39 @@ async function updateArticle(req, res) {
       return res.status(400).json(err);
     }
   }
+
 //to be comment out
 async function listArticles(req, res) {
-    const texts = 'SELECT * FROM articlesv1 ORDER BY articleId ASC';
+    const texts = 'SELECT * FROM articles ORDER BY articleid ASC';
     try {
       const { rows } = await pool.query(texts);
       if (!rows) {
         return res.status(404).json({'message': 'articles not found'});
       }
-      return res.status(200).send(rows);
+      return res.status(200).json(rows);
     } catch(error) {
-      return res.status(400).send(error)
+      return res.status(400).json(error)
     }
   }
 async function getArticle(req, res) {
-    const text = `SELECT * FROM articlesv1 a, a_comments b
-                    WHERE a.title = b.title
-                    AND articleId = $1`;
+    const text = 'SELECT * FROM articles WHERE articleid = $1';
     try {
-      const { rows } = await pool.query(text, [req.params.articleId]);
+      const { rows } = await pool.query(text, [req.params.id]);
       if (!rows[0]) {
         return res.status(404).json({'message': 'article not found'});
       }
-      return res.status(200).send(rows[0]);
+      return res.status(200).json(rows[0]);
+
     } catch(error) {
-      return res.status(400).send(error)
+      return res.status(400).json(error)
     }
   }
 
+
   async function removeArticle(req, res, next) {
-    const deleteQuery = `DELETE FROM articlesv1 WHERE articleId=$1 RETURNING *`;
+    const deleteQuery = `DELETE FROM articles WHERE articleid=$1 RETURNING *`;
     try{
-        const { rows } = await pool.query(deleteQuery, [req.params.articleId]);
+        const { rows } = await pool.query(deleteQuery, [req.params.id]);
           if(!rows[0]) {
             return res.status(400).json({'message': 'Article not found'})
           }
@@ -150,4 +141,4 @@ async function commentArticle (req, res) {
 
 
 
- module.exports = {createArticle, updateArticle, getArticle, listArticles, removeArticle, commentArticle, hasAuthorization, postByID}
+ module.exports = {createArticle, updateArticle, getArticle, listArticles, removeArticle, commentArticle }

@@ -48,19 +48,18 @@ const articleTableQuery = ` CREATE TABLE IF NOT EXISTS articles (
 	article 			VARCHAR(255)  	NOT NULL,
 	title 				VARCHAR(255)	NOT NULL,
 	createdOn 			DATE			NOT NULL,
-	userid 			SERIAL,
+	userid 				SERIAL,
 	FOREIGN KEY (userid) REFERENCES employee (userid),
-	PRIMARY KEY	(article, title)
+	PRIMARY KEY	(articleid)
 ); `
 
 const articleCommentTableQuery = ` CREATE TABLE IF NOT EXISTS a_comments (
 	commentid 		SERIAL,
 	comment 		VARCHAR(250)	NOT NULL,
 	createdOn 		DATE			NOT	NULL,
-	title			VARCHAR(255)  	NOT NULL,
-	article 		VARCHAR(255)	NOT NULL,
+	articleid		SERIAL,
  	PRIMARY KEY (commentid),
- 	FOREIGN KEY (title, article) REFERENCES articles (title, article)
+ 	FOREIGN KEY (articleid) REFERENCES articles (articleid)
 );`
 
 const gifTableQuery = ` CREATE TABLE IF NOT EXISTS gifs (
