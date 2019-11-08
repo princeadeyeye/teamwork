@@ -4,41 +4,56 @@ const pool = require('../database/database')
 const cloud = require('../../cloudinaryConfig.js');
 
 
-const createGif = (req, res) => {
-try{
+async function createGif (req, res)  {
+
    let imageDetails = {
     title: req.body.title,
     cloudImage: req.files[0].path,
     gifid: ''
   }
 // IF ALL THING GO WELL, POST THE IMAGE TO CLOUDINARY
-    cloud.uploads(imageDetails.cloudImage)
+try {
+  cloud.uploads(imageDetails.cloudImage)
       .then((result) => {
       let imageDetails = {
         title: req.body.title,
         cloudImage: result.url,
         gifid: result.id
     }
-//THEN CREATE THE FILE IN THE DATABASE
-      imageModel.create(imageDetails, (err, created)=> {
-        if(err){
-          res.json({
-            err: err,
-            message: 'could not upload image, try again'
-            })
-      }else {
-          res.json({
-          created: created,
-          message: "image uploaded successfully!!"
-        })
-      }
-    })
-})
+  });
 
-} catch(execptions){
-console.log(execptions)
-  }
+} catch(error) {
+  res.status(400).json(error)
 }
+    
+//THEN CREATE THE FILE IN THE DATABASE
+ const createQuery = `
+    INSERT INTO
+      gifs(
+        gifid
+        title,
+        imageUrl,      
+        userid,   
+        createdOn       
+        )
+      VALUES($1, $2, $3, $4)
+      returning *`;
+    const values = [
+      imageDetails.gifid,
+      imageDetails.title,
+      imageDetails.cloudImage,
+      req.body.userid,
+      moment(new Date())
+    ];
+
+    try {
+      const { rows } = await pool.query(createQuery, values);
+        return res.status(201).json(rows[0]);
+    } catch(error) {
+      return res.status(400).json(error);
+    }
+  }
+
 
      async function postByID(req, res, next) {
       const text = 'SELECT * FROM gifs WHERE gifid = $1';
