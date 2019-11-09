@@ -4,7 +4,7 @@ const multer = require('multer');
 const storage = multer.diskStorage({
 	destination:function(req, file,cb){
 		if(file.mimetype === 'image/gif'){
-			cb(null, './files/images/');
+			cb(null, './backend/files/images/');
 		}else{
 			cb({message: 'this file is not a gif file'}, false)
 		}

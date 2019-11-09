@@ -18,10 +18,6 @@ const adminRoute = require('./routes/admin-route')
 // express
 const app = express();
 
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static('uploads'));
-
 // MIDDLEWARE
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true}))
@@ -35,7 +31,7 @@ app.use(cors({credentials: true, origin: 'http://localhost:5000'}));
 app.use('/', userRoute)
 app.use('/', authRoute)
 app.use('/', articleRoute)
-app.use('/uploads', gifRoute)
+app.use('/', gifRoute)
 app.use('/', adminRoute)
 
 

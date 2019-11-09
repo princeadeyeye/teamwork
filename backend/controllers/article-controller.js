@@ -74,10 +74,10 @@ async function listArticles(req, res) {
     }
   }
 async function getArticle(req, res) {
-    const articleCommentQ = `SELECT articles.articleid, title, article, articles.createdOn, userid, 
-                              commentid, comment, a_comments.createdOn
+    const articleCommentQ = `SELECT articles.articleid, title, article, articles.createdOn, 
+                           articlecomments.userid, commentid, comment
                             FROM articles
-                              INNER JOIN a_comments ON a_comments.articleid = articles.articleid 
+                              INNER JOIN articlecomments ON articlecomments.articleid = articles.articleid 
                             WHERE articles.articleid = $1`;
           const articleQ = `SELECT * FROM articles WHERE articleid = $1`;
     try {
@@ -112,7 +112,7 @@ async function getArticle(req, res) {
 async function commentArticle (req, res) {
       const insertCommentq = `
     INSERT INTO
-      a_comments(
+      articlecomments(
         comment,     
         articleid,
         createdOn      
@@ -125,13 +125,13 @@ async function commentArticle (req, res) {
       moment(new Date())
     ];
 
-    const findOneQ = 'SELECT * FROM a_comments WHERE articleid=$1';
-    const updateOneQ =`UPDATE a_comments
+    const findOneQ = 'SELECT * FROM articlecomments WHERE articleid=$1';
+    const updateOneQ =`UPDATE articlecomments
                         SET comment = $1, createdOn=$2 
                         returning *`;
-    const commentArticleQ = `SELECT title, article, a_comments.createdOn, comment
+    const commentArticleQ = `SELECT title, article, articlecomments.createdOn, comment
                             FROM articles
-                              INNER JOIN a_comments ON a_comments.articleid = articles.articleid 
+                              INNER JOIN articlecomments ON articlecomments.articleid = articles.articleid 
                             WHERE articles.articleid = $1`;
     let values = [
       req.body.comment,
@@ -165,8 +165,27 @@ async function commentArticle (req, res) {
     next()
 }*/
 
+async function feeds(req, res) {
+      const feedQuery =`   
+       SELECT articleid, title, article, createdOn, userid
+       FROM articles
+       UNION 
+       SELECT gifid, title, imageUrl, createdOn, userid
+        FROM gifs
+        ORDER BY articleid ASC
+       `;
+      try {
+        const { rows } = await pool.query(feedQuery);
+        if (!rows) {
+          return res.status(404).json(error)
+        }
+        return res.status(200).send(rows);
+    } catch(error) {
+        return res.status(400).send(error)
+    }
+  }
 
 
 
 
- module.exports = {createArticle, updateArticle, getArticle, listArticles, removeArticle, commentArticle }
+ module.exports = {createArticle, updateArticle, getArticle, listArticles, removeArticle, commentArticle, feeds }

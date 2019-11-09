@@ -53,13 +53,16 @@ const articleTableQuery = ` CREATE TABLE IF NOT EXISTS articles (
 	PRIMARY KEY	(articleid)
 ); `
 
-const articleCommentTableQuery = ` CREATE TABLE IF NOT EXISTS a_comments (
+const articleCommentTableQuery = ` CREATE TABLE IF NOT EXISTS articlecomments (
 	commentid 		SERIAL,
 	comment 		VARCHAR(250)	NOT NULL,
 	createdOn 		DATE			NOT	NULL,
 	articleid		SERIAL,
+	userid 			SERIAL,
  	PRIMARY KEY (commentid),
- 	FOREIGN KEY (articleid) REFERENCES articles (articleid)
+ 	FOREIGN KEY (articleid) REFERENCES articles (articleid),
+ 	FOREIGN KEY(userid) REFERENCES employee (userid)
+
 );`
 
 const gifTableQuery = ` CREATE TABLE IF NOT EXISTS gifs (
@@ -69,17 +72,19 @@ const gifTableQuery = ` CREATE TABLE IF NOT EXISTS gifs (
 	imageUrl		VARCHAR(255) 	NOT NULL,
 	userid			SERIAL,
 	FOREIGN KEY (userid) REFERENCES employee (userid),
-	PRIMARY KEY 	(title)
+	PRIMARY KEY 	(gifid)
 )`
 
 
-const gifCommentTableQuery = ` CREATE TABLE IF NOT EXISTS g_comments (
+const gifCommentTableQuery = ` CREATE TABLE IF NOT EXISTS gifcomments (
 	commentid 		SERIAL,
 	comment 		VARCHAR(250)	NOT NULL,
 	createdOn 		DATE			NOT	NULL,
-	title			VARCHAR(255)  	NOT NULL,
+	gifid			SERIAL,
+	userid 			SERIAL,
  	PRIMARY KEY (commentid),
- 	FOREIGN KEY (title) REFERENCES gifs (title)
+ 	FOREIGN KEY (gifid) REFERENCES gifs (gifid),
+ 	FOREIGN KEY(userid) REFERENCES employee (userid)
 
 )`
 

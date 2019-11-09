@@ -23,6 +23,7 @@ router.delete('/api/v1/articles/:id', authCtrl.requireSignin, articleCtrl.remove
  router.put('/api/v1/articles/:id/comment', authCtrl.requireSignin, articleCtrl.commentArticle)
 
 
-
+// view all gif and articles
+router.get('/api/v1/feed/', authCtrl.requireSignin, articleCtrl.feeds)
 
 module.exports = router;
