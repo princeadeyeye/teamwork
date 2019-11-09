@@ -1,6 +1,6 @@
 const pool = require('../database/database')
 //IMPORT CLOUDINARY CONFIG HERE
-const cloudinary = require('../../cloudinaryConfig.js');
+const cloudinary = require('../cloudinaryConfig.js');
 
 
 async function createGif (req, res)  {
