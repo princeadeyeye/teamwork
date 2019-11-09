@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon ./backend/server",
-    "test": "jasmine-node spec"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
