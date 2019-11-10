@@ -1,47 +1,63 @@
-const request = require('request');
-const server = require('../routes/article-route')
-const base_url = 'http://localhost:5000/'
+const request = require('supertest');
+const server = require('../app.js')
 
 
-describe("Article Route", function() {
+describe("Article Route", () => {
 
 
-  describe("Post Article Route", function() {
-    test("it should returns status code 201", function(done) {
-      request.post(base_url, function(error, response, body) {
+  describe("Post Article Route", () => {
+    test("it should returns status code 201", (done) => {
+        request(app).post('/v2/articles/').then((response) => {
+         expect(response.statusCode).toBe(201);
+        done();
+      });
+    });
+  });
+
+describe("Update Article Route", () => {
+    test("it should returns status code 200", (done) => {
+        request(app).patch('/v2/articles/:id').then((response) => {
+        expect(response.statusCode).toBe(200);
+        done();
+      });
+    });
+  });
+
+describe("Delete Article Route", () => {
+    test("it should returns status code 204", (done) => {
+      request(app).delete('/v2/articles/:id').then((response) => {
+        expect(response.statusCode).toBe(200);
+        done();
+      });
+    });
+  });
+
+describe("Get Article Route", () => {
+    test("it should returns status code 200", (done) => {
+      request(app).get('/v2/articles/:id').then((response) => {
+        expect(response.statusCode).toBe(200);
+        done();
+      });
+    });
+  });
+
+
+describe("Put Article Comment ", () => {
+    test("it should returns status code 200", (done) => {
+      request(app).put('/v2/articles/:id/comment').then((response) => {
         expect(response.statusCode).toBe(201);
         done();
       });
     });
-
   });
 
-describe("Update Article Route", function() {
+describe("Get Feed", () => {
     test("it should returns status code 200", function(done) {
-      request.patch(base_url, function(error, response, body) {
+      request(app).get('/v2/feed/').then((response) => {
         expect(response.statusCode).toBe(200);
         done();
       });
     });
   });
-
-describe("Delete Article Route", function() {
-    test("it should returns status code 204", function(done) {
-      request.delete(base_url, function(error, response, body) {
-        expect(response.statusCode).toBe(204);
-        done();
-      });
-    });
-  });
-
-describe("Get Article Route", function() {
-    test("it should returns status code 200", function(done) {
-      request.get(base_url, function(error, response, body) {
-        expect(response.statusCode).toBe(200);
-        done();
-      });
-    });
-  });
-
 
 })
