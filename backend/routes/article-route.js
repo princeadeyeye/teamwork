@@ -17,7 +17,7 @@ router.delete('/v2/articles/:id', authCtrl.requireSignin, articleCtrl.removeArti
  router.get('/v2/articles/:id', authCtrl.requireSignin, articleCtrl.getArticle)
 
 // view all articles
- router.get('/v2/articles/', authCtrl.requireSignin, articleCtrl.listArticles)
+ router.get('/v2/article/:id', authCtrl.requireSignin, articleCtrl.listArticles)
 
 // comment on article
  router.put('/v2/articles/:id/comment', authCtrl.requireSignin, articleCtrl.commentArticle)

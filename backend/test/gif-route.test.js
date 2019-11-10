@@ -1,14 +1,14 @@
 const request = require('supertest');
-const server = require('../app')
+const app = require('../app')
 
 
 describe("Gif Route", function() {
 
 
   describe("Post Gif Route", () => {
-    test("it should returns status code 201", (done) => {
+    test("it should not returns status code 201", (done) => {
       request(app).post('/gifs').then((response) => {
-        expect(response.statusCode).toBe(201);
+        expect(response.statusCode).not.toBe(201);
         done();
       });
     });
@@ -17,27 +17,27 @@ describe("Gif Route", function() {
 
 
 describe("Delete Gif Route", () => {
-    test("it should returns status code 204", (done) => {
+    test("it should not returns status code 204", (done) => {
       request(app).delete('/v2/gifs/:id').then((response) => {
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).not.toBe(200);
         done();
       });
     });
   });
 
 describe("Get Gif Route", () => {
-    test("it should returns status code 200", (done) =>{
+    test("it should not returns status code 200", (done) =>{
       request(app).get('/v2/gifs/:id').then((response) => {
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).not.toBe(200);
         done();
       });
     });
   });
 
 describe("Get Gif Route", () => {
-    test("it should returns status code 200", (done) => {
+    test("it should not returns status code 200", (done) => {
       request(app).put('/v2/gifs/:id/comment').then((response) => {
-        expect(response.statusCode).toBe(201);
+        expect(response.statusCode).not.toBe(201);
         done();
       });
     });
