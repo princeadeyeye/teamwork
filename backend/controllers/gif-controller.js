@@ -1,6 +1,8 @@
-const pool = require('../database/database')
+const pool = require('../database/db')
 //IMPORT CLOUDINARY CONFIG HERE
 const cloudinary = require('../cloudinaryConfig.js');
+const moment = require ('moment')
+
 
 
 async function createGif (req, res)  {
@@ -12,24 +14,30 @@ console.log(file)
       VALUES($1, $2, $3, $4)
       returning *`;
    
-cloudinary.uploader.upload(file.tempFilePath, (err, result) => {
- if (err) {
-  return res.status(401).send({error: err})
- }
+const result = await cloudinary.uploader.upload(file.tempFilePath)
   const values = [
       file.name,
       result.url,
       req.body.userid,
       result.created_at
     ];
+  try {
+      const { rows } = await pool.query(createQuery, values);
+        return res.status(201)
+                  .json({
+                    "status": "success",
+                    "data": {
+                      "message": "Gif successfully created",
+                      "articleId": rows[0].gifid,
+                      "createdOn": rows[0].createdon,
+                      "title": rows[0].title,
+                      "imageUrl" : rows[0].imageurl,
+                      }
+                    });
+    } catch(error) {
+      return res.status(400).json(error);
+    }
 
-pool.query(createQuery, values, (err, results) => {
-  if(err) {
-    return res.status(401).send({error: err})
-  }
-  return res.status(201).send({success: true, data: results.rows[0]});
-      }); 
-    })
 }
 
 /*
@@ -62,7 +70,7 @@ pool.query(createQuery, values, (err, results) => {
   }
 async function getGif(req, res) {
     const gifCommentQ = `SELECT gifs.gifid, title, imageUrl, gifs.createdOn, 
-                              commentid, comment, a_comments.userid
+                              commentid, comment, gifcomments.userid
                             FROM gifs
                               INNER JOIN gifcomments ON gifcomments.gifid = gifs.gifid 
                             WHERE gifs.gifid = $1`;
@@ -74,9 +82,45 @@ async function getGif(req, res) {
           if(!response.rows[0]){
             return res.status(404).json({'message': 'article not found'});
           }
-              return res.status(200).json(response.rows[0])
+              return res.status(200)
+                          .json({
+                            "status": "success",
+                            "data": {
+                            "id": response.rows[0].gifid,
+                            "createdOn": response.rows[0].createdOn,
+                            "title": response.rows[0].title,
+                            "url": response.rows[0].imageurl,
+                            "comments": "Comment is not yet available",
+                    }
+                        })
       }
-      return res.status(200).json(rows[0]);
+      return res.status(200)
+                    .json({
+                            "status": "success",
+                            "data": {
+                            "id": rows[0].gifid,
+                            "createdOn": rows[0].createdon,
+                            "title": rows[0].title,
+                            "article": rows[0].imageurl,
+                            "comments": [
+                              {
+                                "commentId":rows[0].commentid,
+                                "authorId": rows[0].userid,
+                                "comment":rows[0].comment,
+                              },
+                              {
+                                "commentId": rows[1].commentid,
+                                "authorId": rows[1].userid,
+                                "comment": rows[1].comment,
+                              },
+                              {
+                                "commentId": rows[2].commentid,
+                                "authorId": rows[1].userid,
+                                "comment": rows[2].comment,
+                              }
+                            ]
+                    }
+                  })
     } catch(error) {
       return res.status(400).json(error)
     }
@@ -84,13 +128,19 @@ async function getGif(req, res) {
 
 
   async function removeGif(req, res, next) {
-    const deleteQuery = `DELETE FROM gifs WHERE gifs=$1 RETURNING *`;
+    const deleteQuery = `DELETE FROM gifs WHERE gifid=$1 RETURNING *`;
     try{
         const { rows } = await pool.query(deleteQuery, [req.params.id]);
           if(!rows[0]) {
             return res.status(400).json({'message': 'Gif not found'})
           }
-          return res.status(204).send({'message': 'Gif Successfully deleted'})
+          return res.status(200)
+                    .send({
+                      "status": "success",
+                      "data": {
+                          "message": "Gif Successfully deleted"
+                      }
+                    })
       } catch(error) {
       return res.status(404).json(error)
     }
@@ -99,16 +149,13 @@ async function getGif(req, res) {
 async function commentGif (req, res) {
       const insertCommentq = `
     INSERT INTO
-      gifcomments(
-        comment,     
-        gifid,
-        createdOn      
-        )                   
-      VALUES($1, $2, $3)
+      gifcomments( comment, gifid, userid, createdOn )                   
+      VALUES($1, $2, $3, $4) 
       returning *`;
     let insertvalue = [
       req.body.comment,
       req.body.gifid,
+      req.body.userid,
       moment(new Date())
     ];
 
@@ -118,8 +165,8 @@ async function commentGif (req, res) {
                         returning *`;
     const commentArticleQ = `SELECT title, gifcomments.createdOn, comment
                             FROM gifs
-                              INNER JOIN gifcomments ON gifcomments.gifid = articles.articleid 
-                            WHERE articles.gifid = $1`;
+                              INNER JOIN gifcomments ON gifcomments.gifid = gifs.gifid 
+                            WHERE gifs.gifid = $1`;
     let values = [
       req.body.comment,
       moment(new Date())
@@ -129,14 +176,23 @@ async function commentGif (req, res) {
     const { rows } = await pool.query(insertCommentq, insertvalue);
     const find = await pool.query(findOneQ, [req.params.id])
       if(!find.rows[0]) {
-        res.status(400).json({message: "Article not found"})
+        res.status(400).json({message: "Gif not found"})
       }
         const response = await pool.query(updateOneQ, values);
         if(!response.rows[0]) {
-          res.status(400).json({message: "Unable to comment on article"})
+          res.status(400).json({message: "Unable to comment on gif"})
         }
         const message = await pool.query(commentArticleQ, [req.params.id]);
-       return res.status(201).json(message.rows[0]);
+       return res.status(201)
+                  .json({
+                    "status": "success",
+                        "data": {
+                            "message": "Comment successfully created",
+                            "createdOn": message.rows[0].createdon,
+                            "gifTitle": message.rows[0].title,
+                            "comment": message.rows[0].comment,
+                        }
+                  });
     } catch(error) {
       return res.status(400).json(error);
     }

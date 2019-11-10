@@ -1,5 +1,5 @@
 const moment = require ('moment');
-const pool = require ('../database/database');
+const pool = require ('../database/db');
 const Helper = require ('../Helper');
 const expressJwt = require('express-jwt')
 

@@ -17,8 +17,9 @@ pool.on('connect', () => {
 
 
 //CREATING TABLES
-
- const adminTableQuery = ` CREATE TABLE IF NOT EXISTS admin (
+const createAdminTable = () => {
+ const adminTableQuery = ` 
+ 	CREATE TABLE IF NOT EXISTS admin (
 	    userid 		SERIAL,
 	    first_name  VARCHAR(250)     NOT NULL,
 	    last_name   VARCHAR(250)     NOT NULL,
@@ -28,9 +29,24 @@ pool.on('connect', () => {
 	    department	VARCHAR(250) 	NOT NULL,
 	    address		VARCHAR(250) 	NOT NULL,
 	    PRIMARY KEY (userId)
-); `
 
- const employeeTableQuery = ` CREATE TABLE IF NOT EXISTS employee (
+	); `
+
+
+	
+		pool.query(adminTableQuery)
+		.then((res) => {
+			console.log(res);
+			pool.end();
+			})
+		.catch((err) => {
+			console.log(err);
+			pool.end();
+		});
+}
+const createEmployeeTable = () => {
+	const employeeTableQuery = ` 
+	CREATE TABLE IF NOT EXISTS employee (
 	    userid 		SERIAL,
 	    first_name  VARCHAR(250)     NOT NULL,
 	    last_name   VARCHAR(250)     NOT NULL,
@@ -40,20 +56,49 @@ pool.on('connect', () => {
 	    department	VARCHAR(250) 	NOT NULL,
 	    address		VARCHAR(250) 	NOT NULL,
 	    PRIMARY KEY (userid)
-); `
+	); `
+
+	pool.query(employeeTableQuery)
+		.then((res) => {
+			console.log(res);
+			pool.end();
+			})
+		.catch((err) => {
+			console.log(err);
+			pool.end();
+		});
+
+}
+
+ 
+
+const createArticleTable = () => {
+	const articleTableQuery = ` 
+	CREATE TABLE IF NOT EXISTS articles (
+		articleid 			SERIAL,
+		article 			VARCHAR(255)  	NOT NULL,
+		title 				VARCHAR(255)	NOT NULL,
+		createdOn 			DATE			NOT NULL,
+		userid 				SERIAL,
+		FOREIGN KEY (userid) REFERENCES employee (userid),
+		PRIMARY KEY	(articleid)
+	); `
+
+	pool.query(articleTableQuery)
+		.then((res) => {
+			console.log(res);
+			
+			})
+		.catch((err) => {
+			console.log(err);
+			
+		})
+}
 
 
-const articleTableQuery = ` CREATE TABLE IF NOT EXISTS articles (
-	articleid 			SERIAL,
-	article 			VARCHAR(255)  	NOT NULL,
-	title 				VARCHAR(255)	NOT NULL,
-	createdOn 			DATE			NOT NULL,
-	userid 				SERIAL,
-	FOREIGN KEY (userid) REFERENCES employee (userid),
-	PRIMARY KEY	(articleid)
-); `
-
-const articleCommentTableQuery = ` CREATE TABLE IF NOT EXISTS articlecomments (
+const createArticleCommentsTable = () => {
+	const articleCommentTableQuery = ` 
+	CREATE TABLE IF NOT EXISTS articlecomments (
 	commentid 		SERIAL,
 	comment 		VARCHAR(250)	NOT NULL,
 	createdOn 		DATE			NOT	NULL,
@@ -65,7 +110,21 @@ const articleCommentTableQuery = ` CREATE TABLE IF NOT EXISTS articlecomments (
 
 );`
 
-const gifTableQuery = ` CREATE TABLE IF NOT EXISTS gifs (
+pool.query(articleCommentTableQuery)
+		.then((res) => {
+			console.log(res);
+			pool.end();
+			})
+		.catch((err) => {
+			console.log(err);
+			pool.end();
+		})
+}
+
+
+const createGifsTable = () => {
+	const gifTableQuery = ` 
+	CREATE TABLE IF NOT EXISTS gifs (
 	gifid 			SERIAL,
 	title 			VARCHAR(255) 	NOT NULL,
 	createdOn 		DATE			NOT NULL,
@@ -73,10 +132,24 @@ const gifTableQuery = ` CREATE TABLE IF NOT EXISTS gifs (
 	userid			SERIAL,
 	FOREIGN KEY (userid) REFERENCES employee (userid),
 	PRIMARY KEY 	(gifid)
-)`
+)`;
+
+		pool.query(gifTableQuery)
+		.then((res) => {
+			console.log(res);
+			pool.end();
+			})
+		.catch((err) => {
+			console.log(err);
+			pool.end();
+		});
+
+}
 
 
-const gifCommentTableQuery = ` CREATE TABLE IF NOT EXISTS gifcomments (
+const createGifCommentsTable = () => {
+	const gifCommentTableQuery = ` 
+	CREATE TABLE IF NOT EXISTS gifcomments (
 	commentid 		SERIAL,
 	comment 		VARCHAR(250)	NOT NULL,
 	createdOn 		DATE			NOT	NULL,
@@ -86,67 +159,27 @@ const gifCommentTableQuery = ` CREATE TABLE IF NOT EXISTS gifcomments (
  	FOREIGN KEY (gifid) REFERENCES gifs (gifid),
  	FOREIGN KEY(userid) REFERENCES employee (userid)
 
-)`
+)`;
 
-
-
-	
-	pool.query(employeeTableQuery)
+pool.query(gifCommentTableQuery)
 		.then((res) => {
 			console.log(res);
-			
+			pool.end()
 			})
 		.catch((err) => {
 			console.log(err);
-		});
-
-		pool.query(adminTableQuery)
-		.then((res) => {
-			console.log(res);
-			
-			})
-		.catch((err) => {
-			console.log(err);
-		});
-
-		pool.query(articleCommentTableQuery)
-		.then((res) => {
-			console.log(res);
-			
-			})
-		.catch((err) => {
-			console.log(err);
-			
+			pool.end()
 		})
-		pool.query(gifTableQuery)
-		.then((res) => {
-			console.log(res);
-			
-			})
-		.catch((err) => {
-			console.log(err);
-			
-		})
-		pool.query(gifCommentTableQuery)
-		.then((res) => {
-			console.log(res);
-			
-			})
-		.catch((err) => {
-			console.log(err);
-			
-		})
+}
+
+		
 
 
-		pool.query(articleTableQuery)
-		.then((res) => {
-			console.log(res);
-			
-			})
-		.catch((err) => {
-			console.log(err);
-			
-		})
-
-
-module.exports = pool
+module.exports = {
+	createEmployeeTable,
+	createAdminTable,
+	createArticleTable,
+	createGifsTable,
+	createArticleCommentsTable,
+	createGifCommentsTable
+}

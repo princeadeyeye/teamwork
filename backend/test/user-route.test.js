@@ -1,5 +1,5 @@
 const request = require('request');
-const server = require('../backend/server')
+const server = require('../routes/user-route')
 const base_url = 'http://localhost:5000/'
 
 

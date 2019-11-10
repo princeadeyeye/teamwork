@@ -1,5 +1,5 @@
 const moment = require ('moment');
-const pool = require ('../database/database');
+const pool = require ('../database/db');
 const Helper = require ('../Helper');
 const expressJwt = require('express-jwt')
 
@@ -35,13 +35,17 @@ const expressJwt = require('express-jwt')
       const id = rows[0].userid
       const token = Helper.generateToken(id);
       return res.status(201)
-                .json({ message: "User account successfully created",
-                        token, id });
+                .json({  "status": "success", 
+                                 "data": {
+                                  "message" : "User account successfully created",
+                                  token,
+                                  "userid": id }
+                                  });
     } catch(error) {
       if (error.routine === '_bt_check_unique') {
-        return res.status(400).json({ 'message': 'User with that EMAIL already exist' })
+        return res.status(400).send({ 'message': 'User with that EMAIL already exist' })
       }
-      return res.status(400).json(error);
+      return res.status(400).send(error);
     }
   }
 
@@ -63,7 +67,12 @@ const expressJwt = require('express-jwt')
         }
         const id = rows[0].userid
         const token = Helper.generateToken(id);
-        return res.status(200).json({ id, token });
+        return res.status(200).json({ 
+                                "status": "success", 
+                                 "data": {
+                                  token,
+                                  "userid": id } 
+                                });
     } catch(error) {
       return res.status(400).json(error)
     }

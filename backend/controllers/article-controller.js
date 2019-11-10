@@ -1,4 +1,4 @@
-const pool = require('../database/database')
+const pool = require('../database/db')
 const moment = require ('moment')
 const expressJwt = require('express-jwt')
 const jwt = require ('jsonwebtoken')
@@ -25,7 +25,16 @@ async function createArticle (req, res) {
 
     try {
       const { rows } = await pool.query(createQuery, values);
-        return res.status(201).json(rows[0]);
+        return res.status(201)
+                  .json({
+                    "status": "success",
+                    "data": {
+                    "message": "Article successfully created",
+                    "articleId": rows[0].articleid,
+                    "createdOn": rows[0].createdOn,
+                    "title": rows[0].title
+                    }
+                    });
     } catch(error) {
       return res.status(400).json(error);
     }
@@ -87,9 +96,45 @@ async function getArticle(req, res) {
           if(!response.rows[0]){
             return res.status(404).json({'message': 'article not found'});
           }
-              return res.status(200).json(response.rows[0])
+              return res.status(200)
+                        .json({
+                            "status": "success",
+                            "data": {
+                            "id": response.rows[0].articleid,
+                            "createdOn": response.rows[0].createdOn,
+                            "title": response.rows[0].title,
+                            "article": response.rows[0].article,
+                            "comments": "Comment is not yet available",
+                    }
+                        })
       }
-      return res.status(200).json(rows[0]);
+      return res.status(200)
+               .json({
+                            "status": "success",
+                            "data": {
+                            "id": rows[0].articleid,
+                            "createdOn": rows[0].createdon,
+                            "title": rows[0].title,
+                            "article": rows[0].article,
+                            "comments": [
+                              {
+                                "commentId":rows[0].commentid,
+                                "comment":rows[0].comment,
+                                "authorId": rows[0].userid,
+                              },
+                              {
+                                "commentId": rows[1].commentid,
+                                "comment": rows[1].comment,
+                                "authorId": rows[1].userid,
+                              },
+                              {
+                                "commentId": rows[2].commentid,
+                                "comment": rows[2].comment,
+                                "authorId": rows[2].userid,
+                              },
+                            ]
+                    }
+                  })
     } catch(error) {
       return res.status(400).json(error)
     }
@@ -103,7 +148,13 @@ async function getArticle(req, res) {
           if(!rows[0]) {
             return res.status(400).json({'message': 'Article not found'})
           }
-          return res.status(204).send({'message': 'Article Successfully deleted'})
+          return res.status(200)
+                    .send({
+                      "status": "success",
+                      "data": {
+                          "message": "Gif Successfully deleted"
+                      }
+                    })
       } catch(error) {
       return res.status(404).json(error)
     }
@@ -115,13 +166,15 @@ async function commentArticle (req, res) {
       articlecomments(
         comment,     
         articleid,
+        userid,
         createdOn      
         )
-      VALUES($1, $2, $3)
+      VALUES($1, $2, $3, $4)
       returning *`;
     let insertvalue = [
       req.body.comment,
       req.body.articleid,
+      req.body.userid,
       moment(new Date())
     ];
 
@@ -149,7 +202,17 @@ async function commentArticle (req, res) {
           res.status(400).json({message: "Unable to comment on article"})
         }
         const message = await pool.query(commentArticleQ, [req.params.id]);
-       return res.status(201).json(message.rows[0]);
+       return res.status(201)
+                  .json({
+                    "status": "success",
+                        "data": {
+                            "message": "Comment successfully created",
+                            "createdOn": message.rows[0].createdon,
+                            "articleTitle": message.rows[0].title,
+                            "article": message.rows[0].article,
+                            "comment": message.rows[0].comment,
+                        }
+                  });
     } catch(error) {
       return res.status(400).json(error);
     }
@@ -179,7 +242,55 @@ async function feeds(req, res) {
         if (!rows) {
           return res.status(404).json(error)
         }
-        return res.status(200).send(rows);
+        return res.status(200)
+                    .json({
+                        "status": "success",
+                          "data": [
+                            {
+                            "id": rows[0].articleid,
+                            "createdOn": rows[0].createdon,
+                            "title": rows[0].title,
+                            "article/url": rows[0].article,
+                            "authorId": rows[0].userid,
+                          },
+                          {
+                            "id": rows[1].articleid,
+                            "createdOn": rows[1].createdon,
+                            "title": rows[1].title,
+                            "article/url": rows[1].article,
+                            "authorId": rows[1].userid,
+                          }, 
+                          {
+                            "id": rows[2].articleid,
+                            "createdOn": rows[2].createdon,
+                            "title": rows[2].title,
+                            "article/url": rows[2].article,
+                            "authorId": rows[2].userid,
+                          },
+                          {
+                            "id": rows[3].articleid,
+                            "createdOn": rows[3].createdon,
+                            "title": rows[3].title,
+                            "article/url": rows[3].article,
+                            "authorId": rows[3].userid,
+                          },
+                          {
+                            "id": rows[4].articleid,
+                            "createdOn": rows[4].createdon,
+                            "title": rows[4].title,
+                            "article/url": rows[4].article,
+                            "authorId": rows[4].userid,
+                          },
+                          {
+                            "id": rows[5].articleid,
+                            "createdOn": rows[5].createdon,
+                            "title": rows[5].title,
+                            "article/url": rows[5].article,
+                            "authorId": rows[5].userid,
+                          }
+                        ]
+                          
+                    });
     } catch(error) {
         return res.status(400).send(error)
     }
