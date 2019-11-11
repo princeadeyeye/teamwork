@@ -40,20 +40,7 @@ const result = await cloudinary.uploader.upload(file.tempFilePath)
 
 }
 
-/*
-     async function postByID(req, res, next) {
-      const text = 'SELECT * FROM gifs WHERE gifid = $1';
-      try {
-        const { rows } = await pool.query(text, [req.params.articleId]);
-        if (!rows[0]) {
-        return res.status(404).json({'message': 'gif not found'});
-      }
-      return req.profile = rows[0];
-        next();
-    } catch(error) {
-      return res.status(400).json(error)
-    }
-  }*/
+
 
   // To be comment out
   async function listGifs(req, res) {
@@ -134,6 +121,15 @@ async function getGif(req, res) {
           if(!rows[0]) {
             return res.status(400).json({'message': 'Gif not found'})
           }
+            let profile = rows;
+                const authorized = profile && req.auth && profile[0].userid == req.auth.userId
+                  console.log(profile[0].userid)
+                  console.log(req.auth.userId)
+                  if (!(authorized)) {
+                 return res.status('403').json({
+                error: "User is not authorized"
+              })
+            }
           return res.status(200)
                     .send({
                       "status": "success",

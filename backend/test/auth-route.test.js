@@ -1,14 +1,14 @@
 const request = require('supertest');
-const server = require('../app')
+const app = require('../app')
 
 
 describe("Auth Route", () => {
 
 
 describe("Post Auth Route", () => {
-  test("it should returns status code 201", (done) => {
+  test("it should not returns status code 201", (done) => {
    request(app).post('/auth/v2/create-user/').then((response) => {
-        expect(response.statusCode).toBe(201);
+        expect(response.statusCode).not.toBe(201);
         done();
       });
     });
@@ -16,9 +16,9 @@ describe("Post Auth Route", () => {
   });
 
 describe("Sign in to  Auth Route", () => {
-  test("it should returns status code 201", (done) => {
+  test("it should not returns status code 201", (done) => {
    request(app).post('/auth/v2/signin').then((response) => {
-        expect(response.statusCode).toBe(201);
+        expect(response.statusCode).not.toBe(201);
         done();
       });
     });

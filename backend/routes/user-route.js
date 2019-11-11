@@ -5,7 +5,9 @@ const router = express.Router();
 
 
 //list all users
-router.get('/api/v1/users', userCtrl.listUsers)
+router.get('/users', (req, res, next) => {
+	res.status(200).send('testing')
+})
 
 //get a user
 router.get('/api/v1/users/:userId', userCtrl.readUser)

@@ -80,6 +80,10 @@ const expressJwt = require('express-jwt')
   }
 
 
+     const requireSignin = expressJwt({
+      secret: "MY_SECRET_KEY",
+      userProperty: 'auth'
+    })
 
 
 const hasAuthorization = (req, res, next) => {
@@ -92,10 +96,6 @@ const hasAuthorization = (req, res, next) => {
   next()
 }
 
-     const requireSignin = expressJwt({
-      secret: "MY_SECRET_KEY",
-      userProperty: 'auth'
-    })
 
 
-module.exports = { createUser, signin, requireSignin }
+module.exports = { createUser, signin, requireSignin, hasAuthorization }

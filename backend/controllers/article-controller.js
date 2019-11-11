@@ -50,6 +50,15 @@ async function updateArticle(req, res) {
       if(!rows[0]) {
         return res.status(404).json({'message': 'article not found'});
       }
+        let profile = rows;
+          const authorized = profile && req.auth && profile[0].userid == req.auth.userId
+            console.log(profile[0].userid)
+            console.log(req.auth.userId)
+            if (!(authorized)) {
+           return res.status('403').json({
+          error: "User is not authorized"
+        })
+      }
       const values = [
         req.body.title || rows[0].title,
         req.body.article || rows[0].article,
@@ -70,18 +79,27 @@ async function updateArticle(req, res) {
   }
 
 //to be comment out
-async function listArticles(req, res) {
-    const articlesQ = 'SELECT * FROM articles ORDER BY articleid ASC'; 
+/*async function listArticles(req, res) {
+    const articlesQ = 'SELECT * FROM articles WHERE articleid = $1'; 
     try {
-      const { rows } = await pool.query(articlesQ);
+      const { rows } = await pool.query(articlesQ, [req.params.id]);
       if (!rows) {
         return res.status(404).json({'message': 'articles not found'});
       }
+        let profile = rows;
+      const authorized = profile && req.auth && profile[0].userid == req.auth.userId
+        console.log(profile[0].userid)
+        console.log(req.auth.userId)
+        if (!(authorized)) {
+       return res.status('403').json({
+      error: "User is not authorized"
+    })
+  }
       return res.status(200).json(rows);
     } catch(error) {
       return res.status(400).json(error)
     }
-  }
+  }*/
 async function getArticle(req, res) {
     const articleCommentQ = `SELECT articles.articleid, title, article, articles.createdOn, 
                            articlecomments.userid, commentid, comment
@@ -148,6 +166,15 @@ async function getArticle(req, res) {
           if(!rows[0]) {
             return res.status(400).json({'message': 'Article not found'})
           }
+            let profile = rows;
+                const authorized = profile && req.auth && profile[0].userid == req.auth.userId
+                  console.log(profile[0].userid)
+                  console.log(req.auth.userId)
+                  if (!(authorized)) {
+                 return res.status('403').json({
+                error: "User is not authorized"
+              })
+            }
           return res.status(200)
                     .send({
                       "status": "success",
@@ -218,15 +245,7 @@ async function commentArticle (req, res) {
     }
   }
 
-/*  const hasAuthorization = (req, res, next) => {
-    const authorized = req.profile && req.auth && req.profile._id == req.auth._id
-    if (!(authorized)) {
-      return res.status('403').json({
-        error: "User is not authorized"
-      })
-    }
-    next()
-}*/
+
 
 async function feeds(req, res) {
       const feedQuery =`   
