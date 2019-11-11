@@ -5,9 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon ./backend/server",
-    "test": "jest",
-    "test:nodeunit": "nodeunit test",
-    "coveralls": "jscoverage lib && YOURPACKAGE_COVERAGE=1 nodeunit --reporter=lcov backend/test | coveralls",
+    "test": "nodeunit test",
     "test:coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls"
   },
   "repository": {
