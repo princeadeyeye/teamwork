@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon ./backend/server",
     "test": "jest",
-    "test:coverage": "jest --coverage",
+    "coveralls": "jscoverage lib && YOURPACKAGE_COVERAGE=1 nodeunit --reporter=lcov test | coveralls",
     "test:coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls"
   },
   "repository": {
@@ -33,7 +33,9 @@
     "eslint-plugin-react": "^7.16.0",
     "jasmine-node": "^3.0.0",
     "jest": "^24.9.0",
+    "jscoverage": "^0.6.0",
     "nodemon": "^1.19.2",
+    "nodeunit": "^0.11.3",
     "superagent": "^5.1.0",
     "supertest": "^4.0.2"
   },
