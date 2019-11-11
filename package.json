@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon ./backend/server",
-    "test": "nodeunit test",
-    "test:coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls"
+    "test": "nodeunit backend/test",
+    "coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
