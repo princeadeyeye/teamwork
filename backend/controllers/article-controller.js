@@ -318,4 +318,4 @@ async function feeds(req, res) {
 
 
 
- module.exports = {createArticle, updateArticle, getArticle, listArticles, removeArticle, commentArticle, feeds }
+ module.exports = {createArticle, updateArticle, getArticle, removeArticle, commentArticle, feeds }
