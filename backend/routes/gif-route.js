@@ -8,18 +8,18 @@ const router = express.Router();
 
 
 //write & share gif
-router.post('/gifs', fileupload(({useTempFiles:true})), authCtrl.requireSignin, gifCtrl.createGif)
+router.post('/api/v2/gifs', fileupload(({useTempFiles:true})), authCtrl.requireSignin, gifCtrl.createGif)
 
 // delete gif 
-router.delete('/v2/gifs/:id', authCtrl.requireSignin, gifCtrl.removeGif)
+router.delete('/api/v2/gifs/:id', authCtrl.requireSignin, gifCtrl.removeGif)
 
 // get all gifs
-router.get('/v2/gifs', authCtrl.requireSignin, gifCtrl.listGifs )
+router.get('/api/v2/gifs', authCtrl.requireSignin, gifCtrl.listGifs )
 
 // view specific gif
-router.get('/v2/gifs/:id', authCtrl.requireSignin, gifCtrl.getGif)
+router.get('/api/v2/gifs/:id', authCtrl.requireSignin, gifCtrl.getGif)
 
 // comment on gif
-router.put('/v2/gifs/:id/comment', authCtrl.requireSignin, gifCtrl.commentGif)
+router.put('/api/v2/gifs/:id/comment', authCtrl.requireSignin, gifCtrl.commentGif)
 
 module.exports = router;

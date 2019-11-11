@@ -11,7 +11,7 @@ router.post('/admin/v2/create-admin', adminCtrl.createAdmin)
 router.post('/admin/v2/signin', adminCtrl.signin)
 
 
-router.delete('/v2/articles/:id/comment', adminCtrl.requireSignin, adminCtrl.removeComment)
+router.delete('/v2/articles/:id/comment/commentid', adminCtrl.requireSignin, adminCtrl.removeComment)
 
 // user sign out
 // router.get('auth/signout', adminCtrl.signout)*/

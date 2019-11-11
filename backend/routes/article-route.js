@@ -5,26 +5,26 @@ const authCtrl = require('../controllers/auth-controller')
 const router = express.Router();
 
 //write article
- router.post('/v2/articles/', authCtrl.requireSignin, articleCtrl.createArticle)
+ router.post('/api/v2/articles/', authCtrl.requireSignin, articleCtrl.createArticle)
 
 // update article
-router.patch('/v2/articles/:id', authCtrl.requireSignin, articleCtrl.updateArticle)
+router.patch('/api/v2/articles/:id', authCtrl.requireSignin, articleCtrl.updateArticle)
 
 // delete article 
-router.delete('/v2/articles/:id', authCtrl.requireSignin, articleCtrl.removeArticle)
+router.delete('/api/v2/articles/:id', authCtrl.requireSignin, articleCtrl.removeArticle)
 
  // view specific article
- router.get('/v2/articles/:id', authCtrl.requireSignin, articleCtrl.getArticle)
+ router.get('/api/v2/articles/:id', authCtrl.requireSignin, articleCtrl.getArticle)
 
 
 // view articles by category
- router.get('/v2/articles/search?query:id', authCtrl.requireSignin, articleCtrl.getArticle)
+ router.get('/api/v2/articles/search?query=id', authCtrl.requireSignin, articleCtrl.getArticle)
 
 // comment on article
- router.put('/v2/articles/:id/comment', authCtrl.requireSignin, articleCtrl.commentArticle)
+ router.put('/api/v2/articles/:id/comment', authCtrl.requireSignin, articleCtrl.commentArticle)
 
 
 // view all gif and articles
-router.get('/v2/feed/', authCtrl.requireSignin, articleCtrl.feeds)
+router.get('/api/v2/feed/', authCtrl.requireSignin, articleCtrl.feeds)
 
 module.exports = router;

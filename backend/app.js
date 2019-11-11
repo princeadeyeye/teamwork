@@ -5,6 +5,7 @@ const compress = require('compression')
 const helmet = require('helmet')
 const cors = require('cors')
 const path = require('path')
+var request = require('request');
 
 
 // USER ROUTES
@@ -34,6 +35,14 @@ app.use('/', articleRoute)
 app.use('/', gifRoute)
 app.use('/', adminRoute)
 
+// documentation
+app.use('/', (req,res) => {
+	const url = 'https://documenter.getpostman.com/view/4934117/SW7T7X52?version=latest'
+		request(url, function (error, response, body) {
+			if(response.statusCode == 200)
+			res.send(body)
+		});
+	})
 
 
 module.exports = app
