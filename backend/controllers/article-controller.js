@@ -169,7 +169,7 @@ async function getArticle(req, res) {
                     .send({
                       "status": "success",
                       "data": {
-                          "message": "Gif Successfully deleted"
+                          "message": "Article Successfully deleted"
                       }
                     })
       } catch(error) {

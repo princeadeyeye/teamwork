@@ -12,3 +12,9 @@ script:
 
 notifications:
   email: false
+
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: "2c7c74b9-a002-4acb-a159-5429af844f1a"

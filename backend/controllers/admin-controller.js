@@ -69,15 +69,32 @@ const expressJwt = require('express-jwt')
     }
 
   }
-const hasAuthorization = (req, res, next) => {
-  const authorized = req.profile && req.auth && req.profile._userid == req.auth._userid
-  if (!(authorized)) {
-    return res.status('403').json({
-      error: "Admin is not authorized"
-    })
+
+ async function removeComment(req, res, next) {
+    const deleteQuery = `DELETE FROM articlecomments WHERE commentid=$1 RETURNING *`;
+    try{
+        const { rows } = await pool.query(deleteQuery, [req.params.id]);
+          if(!rows[0]) {
+            return res.status(400).json({'message': 'Comment not found'})
+          }
+            let profile = rows;
+                const authorized = profile && req.auth && profile[0].userid == req.auth.userId
+                  if (!(authorized)) {
+                 return res.status('403').json({
+                error: "User is not authorized"
+              })
+            }
+          return res.status(200)
+                    .send({
+                      "status": "success",
+                      "data": {
+                          "message": "Comment Successfully deleted"
+                      }
+                    })
+      } catch(error) {
+      return res.status(404).json(error)
+    }
   }
-  next()
-}
 
 const requireSignin = expressJwt({
       secret: "MY_SECRET_KEY",
@@ -85,4 +102,4 @@ const requireSignin = expressJwt({
     })
 
 
-module.exports = { createAdmin, signin, requireSignin, hasAuthorization }
+module.exports = { createAdmin, signin, requireSignin, removeComment }
