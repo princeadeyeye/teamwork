@@ -36,13 +36,7 @@ app.use('/', gifRoute)
 app.use('/', adminRoute)
 
 // documentation
-app.use('/', (req,res) => {
-	const url = 'https://documenter.getpostman.com/view/4934117/SW7T7X52?version=latest'
-		request(url, function (error, response, body) {
-			if(response.statusCode == 200)
-			res.send(body)
-		});
-	})
+
 
 
 module.exports = app

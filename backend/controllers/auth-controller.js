@@ -86,7 +86,7 @@ const expressJwt = require('express-jwt')
     })
 
 
-const hasAuthorization = (req, res, next) => {
+/*const hasAuthorization = (req, res, next) => {
   const authorized = req.profile && req.auth && req.profile._id == req.auth._id
   if (!(authorized)) {
     return res.status('403').json({
@@ -94,8 +94,8 @@ const hasAuthorization = (req, res, next) => {
     })
   }
   next()
-}
+}*/
 
 
 
-module.exports = { createUser, signin, requireSignin, hasAuthorization }
+module.exports = { createUser, signin, requireSignin }
