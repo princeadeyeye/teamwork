@@ -17,7 +17,7 @@ describe("Article Route", () => {
 
 describe("Update Article Route", () => {
     test("it should returns status code 200", (done) => {
-        request(app).patch('/v2/articles/:id').then((response) => {
+        request(app).patch('/v2/articles/1').then((response) => {
         expect(response.statusCode).not.toBe(200);
         done();
       });
@@ -26,7 +26,7 @@ describe("Update Article Route", () => {
 
 describe("Delete Article Route", () => {
     test("it should returns status code 204", (done) => {
-      request(app).delete('/v2/articles/:id').then((response) => {
+      request(app).delete('/v2/articles/1').then((response) => {
         expect(response.statusCode).not.toBe(200);
         done();
       });
@@ -35,7 +35,7 @@ describe("Delete Article Route", () => {
 
 describe("Get Article Route", () => {
     test("it should returns status code 200", (done) => {
-      request(app).get('/v2/articles/:id').then((response) => {
+      request(app).get('/v2/articles/1').then((response) => {
         expect(response.statusCode).not.toBe(200);
         done();
       });

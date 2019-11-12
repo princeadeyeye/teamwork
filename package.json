@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon ./backend/server",
+    "lint": "eslint '**/*.js' --write",
     "test": "jest",
     "coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls"
   },
@@ -60,3 +61,4 @@
     "request": "^2.88.0"
   }
 }
+
