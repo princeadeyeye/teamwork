@@ -81,9 +81,12 @@ async function updateArticle(req, res) {
 async function listArticles(req, res) {
     const articlesQ = 'SELECT * FROM articles WHERE title = $1'; 
     try {
-      const { rows } = await pool.query(articlesQ, [req.query.id]);
+      const { rows } = await pool.query(articlesQ, [req.query.title]);
       if (!rows) {
         return res.status(404).json({'message': 'articles not found'});
+      }
+      if(rows === []) {
+        return res.status(404).send({ message: "Category not found"})
       }
       return res.status(200).json(rows);
     } catch(error) {
@@ -129,17 +132,8 @@ async function getArticle(req, res) {
                                 "commentId":rows[0].commentid,
                                 "comment":rows[0].comment,
                                 "authorId": rows[0].userid,
-                              },
-                              {
-                                "commentId": rows[1].commentid,
-                                "comment": rows[1].comment,
-                                "authorId": rows[1].userid,
-                              },
-                              {
-                                "commentId": rows[2].commentid,
-                                "comment": rows[2].comment,
-                                "authorId": rows[2].userid,
-                              },
+                              }
+            
                             ]
                     }
                   })

@@ -18,7 +18,7 @@ router.delete('/api/v2/articles/:id', authCtrl.requireSignin, articleCtrl.remove
 
 
 // view articles by category
- router.get('/api/v2/articles/search?query=id', authCtrl.requireSignin, articleCtrl.getArticle)
+ router.get('/api/v2/articles/', authCtrl.requireSignin, articleCtrl.listArticles)
 
 // comment on article
  router.put('/api/v2/articles/:id/comment', authCtrl.requireSignin, articleCtrl.commentArticle)

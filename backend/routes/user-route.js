@@ -10,7 +10,7 @@ router.get('/', (req, res, next) => {
 })
 
 // get all users
-router.get('/api/v3/feeds', userCtrl.feeds)
+router.get('/api/v2/feeds', userCtrl.feeds)
 
 //Update a user
 router.get('/api/docs', userCtrl.getDocs)

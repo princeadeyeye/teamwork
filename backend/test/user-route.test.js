@@ -16,7 +16,7 @@ describe("Get Documentation", () => {
 
 describe("Get all feeds routes", () => {
     test("should get feeds including articles and gifs", (done) => {
-      request(app).get('/api/v3/feeds').then((response) => {
+      request(app).get('/api/v2/feeds').then((response) => {
         expect(response.statusCode).toBe(200);
         done();
       });
