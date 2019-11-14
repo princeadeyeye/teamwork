@@ -14,6 +14,7 @@ const authRoute = require('./routes/auth-route')
 const articleRoute = require('./routes/article-route')
 const gifRoute = require('./routes/gif-route')
 const adminRoute = require('./routes/admin-route')
+const createDB = require('./database/database')
 
 
 // express
@@ -34,8 +35,15 @@ app.use('/', authRoute)
 app.use('/', articleRoute)
 app.use('/', gifRoute)
 app.use('/', adminRoute)
+app.use('/', createDB.createAdminTable)
+app.use('/', createDB.createEmployeeTable)
+app.use('/', createDB.createArticleTable)
+app.use('/', createDB.createArticleCommentsTable)
+app.use('/', createDB.createGifsTable)
+app.use('/', createDB.createGifCommentsTable)
 
-// documentation
+
+
 
 
 
