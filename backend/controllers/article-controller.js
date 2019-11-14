@@ -52,8 +52,6 @@ async function updateArticle(req, res) {
       }
         let profile = rows;
           const authorized = profile && req.auth && profile[0].userid == req.auth.userId
-            console.log(profile[0].userid)
-            console.log(req.auth.userId)
             if (!(authorized)) {
            return res.status('403').json({
           error: "User is not authorized"

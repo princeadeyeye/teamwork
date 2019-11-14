@@ -5,26 +5,27 @@ const app = require('../app.js')
 
 describe("Article Route", () => {
 
-    /*
-      declare the token variable in a scope accessible
-      by the entire test suite
+    
+      // declare the token variable in a scope accessible
+      // by the entire test suite
   
-    let token;
+ /*   let token;
 
     beforeAll((done) => {
       request(app)
         .post('/auth/v2/signin')
         .send({
-          username: m2@gmail.com,
-          password: 123,
+          email: "m2@gmail.com",
+          password: 123
         })
         .end((err, response) => {
           token = response.body.token; // save the token!
+          console.log(response.data)
           done();
         });
     });*/
 
-  const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3MzYwNTg1NSwiZXhwIjoxNTczNjkyMjU1fQ.htcjbwkmaK5DW4X9XaX-doqKcOZKFBQFirkIGiwemVk'
+   const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3MzcyNjg2OSwiZXhwIjoxNTczODEzMjY5fQ.GgFJAcLmo4WIRfp7la02okl0cpGB-rWFQuV0SU3nuxE'
   const fakeToken = 'thefaketoken123'
 
   describe("Post Article Route", () => {
