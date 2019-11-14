@@ -7,8 +7,8 @@ describe("Gif Route", () => {
     
       // declare the token variable in a scope accessible
       // by the entire test suite
-  
- /*   let token;
+  /*
+    let token;
 
     beforeAll((done) => {
       request(app)
@@ -32,7 +32,7 @@ const testImage = `${__dirname}/../files/images/photo.gif`
 
 
   describe("Post gif Route", () => {
-    test("should not post empty gif", (done) => {
+    test("should post gif successfully", (done) => {
         request(app)
             .post('/api/v2/gifs/')
             .set('Authorization', `Bearer ${token}`)
@@ -45,19 +45,18 @@ const testImage = `${__dirname}/../files/images/photo.gif`
       });
     });
 
-    test("should not post empty gif", (done) => {
+   test("should not allow unauthorized user to post", (done) => {
         request(app)
             .post('/api/v2/gifs/')
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${fakeToken}`)
             .set('content-type', 'application/octet-sream')
             .attach("photo", testImage)
-            .field({ userid: ''})
+            .field({ userid: 1})
             .then((response) => {
-             expect(response.statusCode).toBe(400);
-        done();
+              expect(response.statusCode).toBe(401);
+              done();
       });
-    });   
-
+    });
 
   });
 

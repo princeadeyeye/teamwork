@@ -31,6 +31,10 @@ const expressJwt = require('express-jwt')
 
     try {
       const { rows } = await pool.query(createQuery, values);
+      const role = rows[0].jobRole
+       if(!role === 'admin') {
+        res.status(400).json({message: 'wrong credentials'})
+       }
       const id = rows[0].userid
       const token = Helper.generateToken(id);
       return res.status(201)
@@ -70,31 +74,7 @@ const expressJwt = require('express-jwt')
 
   }
 
- async function removeComment(req, res, next) {
-    const deleteQuery = `DELETE FROM articlecomments WHERE commentid=$1 RETURNING *`;
-    try{
-        const { rows } = await pool.query(deleteQuery, [req.params.id]);
-          if(!rows[0]) {
-            return res.status(400).json({'message': 'Comment not found'})
-          }
-            let profile = rows;
-                const authorized = profile && req.auth && profile[0].userid == req.auth.userId
-                  if (!(authorized)) {
-                 return res.status('403').json({
-                error: "User is not authorized"
-              })
-            }
-          return res.status(200)
-                    .send({
-                      "status": "success",
-                      "data": {
-                          "message": "Comment Successfully deleted"
-                      }
-                    })
-      } catch(error) {
-      return res.status(404).json(error)
-    }
-  }
+
 
 const requireSignin = expressJwt({
       secret: "MY_SECRET_KEY",
@@ -102,4 +82,4 @@ const requireSignin = expressJwt({
     })
 
 
-module.exports = { createAdmin, signin, requireSignin, removeComment }
+module.exports = { createAdmin, signin, requireSignin }

@@ -183,3 +183,5 @@ module.exports = {
 	createArticleCommentsTable,
 	createGifCommentsTable
 }
+
+require('make-runnable');
