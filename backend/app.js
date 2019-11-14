@@ -35,12 +35,12 @@ app.use('/', authRoute)
 app.use('/', articleRoute)
 app.use('/', gifRoute)
 app.use('/', adminRoute)
-app.use('/', createDB.createAdminTable)
+/*app.use('/', createDB.createAdminTable)
 app.use('/', createDB.createEmployeeTable)
 app.use('/', createDB.createArticleTable)
 app.use('/', createDB.createArticleCommentsTable)
 app.use('/', createDB.createGifsTable)
-app.use('/', createDB.createGifCommentsTable)
+app.use('/', createDB.createGifCommentsTable)*/
 
 
 
