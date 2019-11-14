@@ -26,7 +26,6 @@ describe("Gif Route", () => {
 
    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3MzcyNjg2OSwiZXhwIjoxNTczODEzMjY5fQ.GgFJAcLmo4WIRfp7la02okl0cpGB-rWFQuV0SU3nuxE'
   const fakeToken = 'thefaketoken123'
-  let testFilePath = null;
 
 const testImage = `${__dirname}/../files/images/photo.gif`
 

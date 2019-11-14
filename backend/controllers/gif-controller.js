@@ -6,9 +6,7 @@ const moment = require ('moment')
 
 
 async function createGif (req, res)  {
-console.log(req.files)
 const file = req.files.photo;
-console.log(file)
   const createQuery = `INSERT INTO
       gifs(title, imageUrl, userid, createdOn )
       VALUES($1, $2, $3, $4)
