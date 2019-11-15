@@ -2,7 +2,7 @@ const { Pool } = require ('pg');
 // import dotenv from 'dotenv';
 
 // dotenv.config();
- const connectionString = 'postgresql://postgres:adeyeye@localhost:5432/employee?sslmode=disable.'
+ const connectionString = 'postgresql://postgres:adeyeye@localhost:5432/employee'
 
 const pool = new Pool({
   connectionString:connectionString
