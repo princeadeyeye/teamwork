@@ -15,11 +15,11 @@ const articleRoute = require('./routes/article-route')
 const gifRoute = require('./routes/gif-route')
 const adminRoute = require('./routes/admin-route')
 
-
 // express
 const app = express();
 
 // MIDDLEWARE
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true}))
 app.use(cookieParser())
