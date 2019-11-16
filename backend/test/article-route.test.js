@@ -20,7 +20,7 @@ const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTU3
       });
     });
 
-    test("should post article successfully", (done) => {
+  /*  test("should post article successfully", (done) => {
         request(app)
         .post('/api/v2/articles/')
         .set('Authorization', `Bearer ${token}`)
@@ -35,7 +35,7 @@ const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTU3
          expect(response.statusCode).toBe(201);
         done();
       });
-    });
+    });*/
   });
 
 describe("Update Article Route", () => {
