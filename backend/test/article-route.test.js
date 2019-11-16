@@ -29,7 +29,7 @@ const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTU3
           "article": "bullion van are used to pick money",
           "title": "bullion van",
           "createdon": new Date(),
-          "userid": 1
+          "userid": 2
         })
         .then((response) => {
          expect(response.statusCode).toBe(201);
