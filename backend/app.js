@@ -30,7 +30,6 @@ app.use(cookieParser())
 app.use(compress())
 app.use(helmet())
 app.use(cors())
-app.use(cors({credentials: true, origin: 'http://localhost:5000'}));
 
 // ROUTES
 app.use('/', userRoute)
