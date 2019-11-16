@@ -5,25 +5,6 @@ const app = require('../app.js')
 
 describe("Article Route", () => {
 
-    
-      // declare the token variable in a scope accessible
-      // by the entire test suite
-  
-/*    let token;
-
-    beforeAll((done) => {
-      request(app)
-        .post('/auth/v2/signin')
-        .send({
-          email: "m2@gmail.com",
-          password: 123
-        })
-        .end((err, response) => {
-          token = response.body.token; // save the token!
-          console.log(response.data)
-          done();
-        });
-    });*/
 
    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3MzcyNjg2OSwiZXhwIjoxNTczODEzMjY5fQ.GgFJAcLmo4WIRfp7la02okl0cpGB-rWFQuV0SU3nuxE'
   const fakeToken = 'thefaketoken123'
