@@ -4,9 +4,13 @@ const app = require('../app.js')
 
 describe("Gif Route", () => {
 
+<<<<<<< HEAD
 
    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3MzcyNjg2OSwiZXhwIjoxNTczODEzMjY5fQ.GgFJAcLmo4WIRfp7la02okl0cpGB-rWFQuV0SU3nuxE'
+=======
+>>>>>>> testv4_ft
   const fakeToken = 'thefaketoken123'
+const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTU3Mzg3MzQyOCwiZXhwIjoxNTczOTU5ODI4fQ.gUQfTH257Yffp0BpKG9yHWEy7Ql_6X7ecz_2w9_20bQ`
 
 const testImage = `${__dirname}/../files/images/photo.gif`
 
@@ -19,7 +23,7 @@ const testImage = `${__dirname}/../files/images/photo.gif`
             .set('Authorization', `Bearer ${token}`)
             .set('content-type', 'application/octet-sream')
             .attach("photo", testImage)
-            .field({ userid: 1})
+            .field({ userid: 2})
             .then((response) => {
               expect(response.statusCode).toBe(201);
         done();
@@ -32,7 +36,7 @@ const testImage = `${__dirname}/../files/images/photo.gif`
             .set('Authorization', `Bearer ${fakeToken}`)
             .set('content-type', 'application/octet-sream')
             .attach("photo", testImage)
-            .field({ userid: 1})
+            .field({ userid: 2})
             .then((response) => {
               expect(response.statusCode).toBe(401);
               done();
@@ -56,11 +60,11 @@ describe("Delete Gif Route", () => {
 
     test("should accept authorized delete", (done) => {
       request(app)
-      .delete('/api/v2/gifs/19')
+      .delete('/api/v2/gifs/1')
       .set('Authorization', `Bearer ${token}`)
       .set('Accept', 'image/json')
       .then((response) => {
-        expect(response.statusCode).toBe(400);
+        expect(response.statusCode).toBe(404);
         done();
       });
     });
@@ -69,7 +73,7 @@ describe("Delete Gif Route", () => {
 describe("Get Gif Route", () => {
     test("should get single user", (done) => {
       return request(app)
-      .get(`/api/v2/gifs/10`)
+      .get(`/api/v2/gifs/1`)
       .set('Authorization', `Bearer ${token}`)
       .set('Accept', 'image/json')
       .then((response) => {
@@ -101,7 +105,7 @@ describe("Put Gif Comment ", () => {
         .send({
           "comment": "Tinubu bullion van is really disburbing ",
           "gifid": "1",
-           "userid": 1
+           "userid": 2
       })
       .then((response) => {
         expect(response.statusCode).toBe(201);
@@ -117,7 +121,7 @@ describe("Put Gif Comment ", () => {
       .send({
           "comment": "Tinubu bullion van is really disburbing ",
           "gifid": "1",
-           "userid": 1
+           "userid": 2
       })
       .then((response) => {
         expect(response.statusCode).toBe(401);

@@ -17,3 +17,13 @@ deploy:
   provider: heroku
   api_key:
     secure: "2c7c74b9-a002-4acb-a159-5429af844f1a"
+
+addons:
+  postgresql: "10"
+  apt:
+    packages:
+    - postgresql-10
+    - postgresql-client-10
+env:
+  global:
+  - PGPORT=5433

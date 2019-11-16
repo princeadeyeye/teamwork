@@ -5,10 +5,14 @@ const app = require('../app.js')
 
 describe("Article Route", () => {
 
+<<<<<<< HEAD
 
    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3MzcyNjg2OSwiZXhwIjoxNTczODEzMjY5fQ.GgFJAcLmo4WIRfp7la02okl0cpGB-rWFQuV0SU3nuxE'
+=======
+>>>>>>> testv4_ft
   const fakeToken = 'thefaketoken123'
-
+const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTU3Mzg3MzQyOCwiZXhwIjoxNTczOTU5ODI4fQ.gUQfTH257Yffp0BpKG9yHWEy7Ql_6X7ecz_2w9_20bQ`
+ 
   describe("Post Article Route", () => {
     test("should not post empty article", (done) => {
         request(app)
@@ -40,19 +44,19 @@ describe("Article Route", () => {
   });
 
 describe("Update Article Route", () => {
-    test(" should accept unauthorized and unautheticated user without update", (done) => {
+    test(" should not accept unauthorized and unautheticated user without update", (done) => {
         request(app)
         .patch('/api/v2/articles/1')
         .set('Authorization', `Bearer ${token}`)
         .set('Accept', 'application/json')
         .then((response) => {
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).toBe(403);
         done();
       });
     });
 
 
-    test(" should accept unautheticated and authenticated user with update", (done) => {
+    test(" should not accept  authenticated user with update", (done) => {
         request(app)
         .patch('/api/v2/articles/1')
          .set('Authorization', `Bearer ${token}`)
@@ -64,7 +68,7 @@ describe("Update Article Route", () => {
           "userid": 1
         })
         .then((response) => {
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).toBe(403);
         done();
       });
     });
@@ -184,9 +188,7 @@ describe("Get Feed", () => {
         done();
       });
     });
-  });
 
-describe("Get Feed", () => {
     test("reject unautheticated user access to feeds", (done) => {
       request(app)
       .get('/api/v2/feed/')
@@ -197,6 +199,8 @@ describe("Get Feed", () => {
         done();
       });
     });
+
+
   });
 
 })
