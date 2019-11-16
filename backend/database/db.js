@@ -19,9 +19,11 @@ const pool = new Pool({
 })
 */
 
-pool.on('connect', () => {
+/*pool.on('connect', () => {
   console.log('connected to the db');
 });
+*/
+// 
 
 
 //CREATING TABLES
@@ -40,18 +42,6 @@ pool.on('connect', () => {
   ); `
 
 
-  
-    pool.query(adminTableQuery)
-    .then((res) => {
-      console.log(res);
-      })
-    .catch((err) => {
-      console.log(err);
-      pool.end();
-    });
-
-
-
   const employeeTableQuery = ` 
   CREATE TABLE IF NOT EXISTS employee (
       userid    SERIAL,
@@ -65,18 +55,6 @@ pool.on('connect', () => {
       PRIMARY KEY (userid)
   ); `
 
-  pool.query(employeeTableQuery)
-    .then((res) => {
-      console.log(res);
-      })
-    .catch((err) => {
-      console.log(err);
-      pool.end();
-    });
-
-
-
- 
 
   const articleTableQuery = ` 
   CREATE TABLE IF NOT EXISTS articles (
@@ -88,17 +66,6 @@ pool.on('connect', () => {
     FOREIGN KEY (userid) REFERENCES employee (userid),
     PRIMARY KEY (articleid)
   ); `
-
-  pool.query(articleTableQuery)
-    .then((res) => {
-      console.log(res);
-      
-      })
-    .catch((err) => {
-      console.log(err);
-      
-    })
-
 
 
   const articleCommentTableQuery = ` 
@@ -114,14 +81,6 @@ pool.on('connect', () => {
 
 );`
 
-pool.query(articleCommentTableQuery)
-    .then((res) => {
-      console.log(res);
-      })
-    .catch((err) => {
-      console.log(err);
-    })
-
 
   const gifTableQuery = ` 
   CREATE TABLE IF NOT EXISTS gifs (
@@ -133,15 +92,6 @@ pool.query(articleCommentTableQuery)
   FOREIGN KEY (userid) REFERENCES employee (userid),
   PRIMARY KEY   (gifid)
 )`;
-
-    pool.query(gifTableQuery)
-    .then((res) => {
-      console.log(res);
-      })
-    .catch((err) => {
-      console.log(err);
-    });
-
 
   const gifCommentTableQuery = ` 
   CREATE TABLE IF NOT EXISTS gifcomments (
@@ -156,14 +106,14 @@ pool.query(articleCommentTableQuery)
 
 )`;
 
+// database query
+pool.query(adminTableQuery)
+pool.query(employeeTableQuery)
+pool.query(articleTableQuery)
+pool.query(articleCommentTableQuery)
+pool.query(gifTableQuery)
 pool.query(gifCommentTableQuery)
-    .then((res) => {
-      console.log(res);
-      })
-    .catch((err) => {
-      console.log(err);
-    })
-
+   
 
 module.exports = {
  

@@ -35,8 +35,8 @@ const expressJwt = require('express-jwt')
       const id = rows[0].userid
       const token = Helper.generateToken(id);
       return res.status(201)
-                .json({  "status": "success", 
-                                 "data": {
+                .json({  status: "success", 
+                                 data: {
                                   "message" : "User account successfully created",
                                   token,
                                   "userid": id }
@@ -68,10 +68,10 @@ const expressJwt = require('express-jwt')
         const id = rows[0].userid
         const token = Helper.generateToken(id);
         return res.status(200).json({ 
-                                "status": "success", 
-                                 "data": {
+                                status: "success", 
+                                 data: {
                                   token,
-                                  "userid": id } 
+                                  userid: id } 
                                 });
     } catch(error) {
       return res.status(400).json(error)

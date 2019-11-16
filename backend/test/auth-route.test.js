@@ -4,9 +4,10 @@ const app = require('../app')
 
 describe("Employee Route", () => {
 
-const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTU3Mzc1OTY3NiwiZXhwIjoxNTczODQ2MDc2fQ.QhrWRjPErqdcYftB_iMtID56MOft2n4EKS2pdcBH-W0`
+
+
 const faketoken = `ffdvfhfdggdgffmfkvjfhfgkurfbvvfmsfjk,hg,hgh`
- 
+ const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3Mzg1MzkyMiwiZXhwIjoxNTczOTQwMzIyfQ.pjFh7H0ubsW0-8fpOQBNn3yFfcp6dw7s-KVGxntYx_A`
 
   describe("Post Employee Route", () => {
     test("should be able register successfully ", (done) => {
