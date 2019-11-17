@@ -32,44 +32,104 @@ const expressJwt = require('express-jwt')
     try {
       const { rows } = await pool.query(createQuery, values);
       const role = rows[0].jobRole
-       if(!role === 'admin') {
-        res.status(400).json({message: 'wrong credentials'})
+       if(!(role).toLowerCase() === 'admin') {
+        res.status(400)
+                .json({
+                  "status": "error",
+                  "data": {
+                     "message": 'wrong credentials'
+                  }
+                })
        }
       const id = rows[0].userid
       const token = Helper.generateToken(id);
       return res.status(201)
-                .json({ message: "Admin account successfully created",
-                        token, id });
+                .json({ "status": "success",
+                          "data": {
+                            "message": "Admin account successfully created",
+                            "token": token, 
+                            "userId": id 
+                          }
+                        });
     } catch(error) {
       if (error.routine === '_bt_check_unique') {
-        return res.status(400).json({ 'message': 'Admin with that EMAIL already exist' })
+        return res.status(400)
+                  .json({ 
+                    "status": "error",
+                    "data": {
+                    "message": 'Admin with that EMAIL already exist' 
+                      }
+                  })
       }
-      return res.status(400).json(error);
+      return res.status(400)
+                .json({ 
+                    "status": "error",
+                    "data": {
+                    "message": error
+                      }
+                  });
     }
   }
 
 
   async function signin(req, res) {
     if (!req.body.email || !req.body.password) {
-      return res.status(400).json({'message': 'Some values are missing'});
+      return res.status(400)
+                  .json({
+                     "status": "error",
+                    "data": {
+                    "message": "Some values are missing"
+                      }
+                    });
     }
     if (!Helper.isValidEmail(req.body.email)) {
-      return res.status(400).json({ 'message': 'Please enter a valid email address' });
-    }
+      return res.status(400)
+                  .json({
+                     "status": "error",
+                      "data": {
+                      "message": "Enter a valid email passwword"
+                      }
+                    });
+              }
     const text = 'SELECT * FROM admin WHERE email = $1';
     try {
       const { rows } = await pool.query(text, [req.body.email]);
       if (!rows[0]) {
-        return res.status(400).json({'message': 'The credentials you provided is incorrect'});
+        return res.status(400)
+                  .json({
+                     "status": "error",
+                    "data": {
+                    "message": "The credentials you provided is incorrect"
+                      }
+                    });
       }
         if(!Helper.comparePassword(rows[0].password, req.body.password)) {
-          return res.status(400).json({ 'message': 'The credentials you provided is incorrect' });
+          return res.status(400)
+                      .json({
+                      "status": "error",
+                      "data": {
+                      "message": "The password you provided did not match"
+                      }
+                    });
         }
         const id = rows[0].userid
         const token = Helper.generateToken(id);
-        return res.status(200).json({ id, token });
+        return res.status(200)
+                  .json({
+                    "status": "success",
+                    "data": {
+                      "token": token,
+                      "userId": id
+                    }
+                 });
     } catch(error) {
-      return res.status(400).json(error)
+      return res.status(400)
+                  .json({ 
+                    "status": "error",
+                    "data": {
+                    "message": error
+                      }
+                  })
     }
 
   }

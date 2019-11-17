@@ -1,4 +1,4 @@
-const request = require('supertest');
+/*const request = require('supertest');
 const app = require('../app.js')
 
 
@@ -129,4 +129,4 @@ describe("Put Gif Comment ", () => {
       });
     });
   });
-})
+})*/

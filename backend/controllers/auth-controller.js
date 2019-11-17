@@ -36,45 +36,89 @@ const expressJwt = require('express-jwt')
       const token = Helper.generateToken(id);
       return res.status(201)
                 .json({  status: "success", 
-                                 data: {
+                                 "data": {
                                   "message" : "User account successfully created",
-                                  token,
+                                  "token": token,
                                   "userid": id }
                                   });
     } catch(error) {
       if (error.routine === '_bt_check_unique') {
-        return res.status(400).send({ 'message': 'User with that EMAIL already exist' })
+        return res.status(400)
+                  .json({ 
+                    "status": "error",
+                    "data": {
+                    "message": 'Employee with that EMAIL already exist' 
+                      }
+                  });
       }
-      return res.status(400).send(error);
+      return res.status(400)
+                  .json({ 
+                    "status": "error",
+                    "data": {
+                    "message": error
+                      }
+                  });
     }
   }
 
   async function signin(req, res) {
     if (!req.body.email || !req.body.password) {
-      return res.status(400).json({'message': 'Some values are missing'});
-    }
+      return res.status(400)
+                  .json({
+                     "status": "error",
+                      "data": {
+                      "message": "Some values are missing"
+                      }
+                    });
+      }
     if (!Helper.isValidEmail(req.body.email)) {
-      return res.status(400).json({ 'message': 'Please enter a valid email address' });
+      return res.status(400)
+                    .json({
+                     "status": "error",
+                      "data": {
+                      "message": "Enter a valid email passwword"
+                      }
+                    });
     }
     const text = 'SELECT * FROM employee WHERE email = $1';
     try {
       const { rows } = await pool.query(text, [req.body.email]);
       if (!rows[0]) {
-        return res.status(400).json({'message': 'The credentials you provided is incorrect'});
+        return res.status(400)
+                    .json({
+                     "status": "error",
+                    "data": {
+                    "message": "The credentials you provided is incorrect"
+                      }
+                    });
       }
         if(!Helper.comparePassword(rows[0].password, req.body.password)) {
-          return res.status(400).json({ 'message': 'The credentials you provided is incorrect' });
+          return res.status(400)
+                        .json({
+                          "status": "error",
+                          "data": {
+                          "message": "The password you provided did not match"
+                          }
+                        });
         }
         const id = rows[0].userid
         const token = Helper.generateToken(id);
-        return res.status(200).json({ 
-                                status: "success", 
-                                 data: {
-                                  token,
-                                  userid: id } 
-                                });
+        return res.status(200)
+                       .json({
+                          "status": "success",
+                          "data": {
+                          "token": token,
+                          "userId": id
+                    }
+                 });
     } catch(error) {
-      return res.status(400).json(error)
+      return res.status(400)
+                    .json({ 
+                    "status": "error",
+                    "data": {
+                    "message": error
+                      }
+                  });
     }
 
   }
@@ -84,17 +128,6 @@ const expressJwt = require('express-jwt')
       secret: "MY_SECRET_KEY",
       userProperty: 'auth'
     })
-
-
-/*const hasAuthorization = (req, res, next) => {
-  const authorized = req.profile && req.auth && req.profile._id == req.auth._id
-  if (!(authorized)) {
-    return res.status('403').json({
-      error: "User is not authorized"
-    })
-  }
-  next()
-}*/
 
 
 

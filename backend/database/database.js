@@ -1,4 +1,4 @@
-
+/*
 const { Pool } = require('pg');
  require('dotenv').config();
 
@@ -184,4 +184,4 @@ module.exports = {
 	createGifCommentsTable
 }
 
-require('make-runnable');
+require('make-runnable');*/
