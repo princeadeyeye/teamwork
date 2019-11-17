@@ -63,7 +63,7 @@ const result = await cloudinary.uploader.upload(file.tempFilePath)
       return res.status(200)
                     .json({
                       "status": "success",
-                      "data": rrows
+                      "data": rows
                     });
     } catch(error) {
       return res.status(400)

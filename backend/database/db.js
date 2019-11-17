@@ -106,13 +106,13 @@ const pool = new Pool({
 
 )`;
 
-// database query
-/*pool.query(adminTableQuery)
+ // database query
+pool.query(adminTableQuery)
 pool.query(employeeTableQuery)
 pool.query(articleTableQuery)
 pool.query(articleCommentTableQuery)
 pool.query(gifTableQuery)
-pool.query(gifCommentTableQuery)*/
+pool.query(gifCommentTableQuery)
    
 
 module.exports = {

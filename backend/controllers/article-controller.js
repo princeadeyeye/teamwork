@@ -111,7 +111,7 @@ async function listArticles(req, res) {
                       }
                   });
       }
-      if(rows === []) {
+      if(rows === undefined || rows.length === 0) {
         return res.status(404)
                     .send({ 
                       "status": "error",

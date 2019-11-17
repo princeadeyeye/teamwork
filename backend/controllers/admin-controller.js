@@ -30,17 +30,7 @@ const expressJwt = require('express-jwt')
     ];
 
     try {
-      const { rows } = await pool.query(createQuery, values);
-      const role = rows[0].jobRole
-       if(!(role).toLowerCase() === 'admin') {
-        res.status(400)
-                .json({
-                  "status": "error",
-                  "data": {
-                     "message": 'wrong credentials'
-                  }
-                })
-       }
+      const { rows } = await pool.query(createQuery, values);    
       const id = rows[0].userid
       const token = Helper.generateToken(id);
       return res.status(201)
@@ -130,9 +120,9 @@ const expressJwt = require('express-jwt')
                     "message": error
                       }
                   })
-    }
+              }
 
-  }
+          }
 
 
 
