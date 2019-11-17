@@ -36,7 +36,13 @@ async function createArticle (req, res) {
                     }
                     });
     } catch(error) {
-      return res.status(400).json(error);
+      return res.status(400)
+                    .json({ 
+                      "status": "error",
+                      "data": {
+                      "message": error
+                      }
+                  });
     }
   }
 
@@ -48,14 +54,24 @@ async function updateArticle(req, res) {
     try {
       const { rows } = await pool.query(findOneQuery, [req.params.id]);
       if(!rows[0]) {
-        return res.status(404).json({'message': 'article not found'});
+        return res.status(404)
+                      .json({
+                      "status": "error",
+                      "data": {
+                        "message": "Article not found"
+                      }
+                    });
       }
         let profile = rows;
           const authorized = profile && req.auth && profile[0].userid == req.auth.userId
             if (!(authorized)) {
-           return res.status('403').json({
-          error: "User is not authorized"
-        })
+           return res.status(403)
+                        .json({
+                            "status": "error",
+                            "data": {
+                              "message": "User is not authorized"
+                            }
+                        })
       }
       const values = [
         req.body.title || rows[0].title,
@@ -72,7 +88,13 @@ async function updateArticle(req, res) {
                   "article": response.rows[0].article
                 });
     } catch(err) {
-      return res.status(400).json(err);
+      return res.status(400)
+                    .json({ 
+                      "status": "error",
+                      "data": {
+                      "message": error
+                      }
+                  });
     }
   }
 
@@ -81,14 +103,36 @@ async function listArticles(req, res) {
     try {
       const { rows } = await pool.query(articlesQ, [req.query.title]);
       if (!rows) {
-        return res.status(404).json({'message': 'articles not found'});
+        return res.status(404)
+                      .json({
+                      "status": "error",
+                      "data": {
+                        "message": "Articles not found"
+                      }
+                  });
       }
       if(rows === []) {
-        return res.status(404).send({ message: "Category not found"})
+        return res.status(404)
+                    .send({ 
+                      "status": "error",
+                      "data": {
+                        "message": "Category not found"
+                      }
+                    })
       }
-      return res.status(200).json(rows);
+      return res.status(200)
+                    .json({
+                      "status": "success",
+                      "data" : rows
+                    });
     } catch(error) {
-      return res.status(400).json(error)
+      return res.status(400)
+                    .json({ 
+                      "status": "error",
+                      "data": {
+                      "message": error
+                      }
+                  });
     }
   }
 async function getArticle(req, res) {
@@ -103,7 +147,13 @@ async function getArticle(req, res) {
       if (!rows[0]) {
           const response = await pool.query(articleQ, [req.params.id]);
           if(!response.rows[0]){
-            return res.status(404).json({'message': 'article not found'});
+            return res.status(404)
+                        .json({
+                          "status": "error",
+                          "data": {
+                            "message": "article not found"
+                          }
+                        });
           }
               return res.status(200)
                         .json({
@@ -136,7 +186,13 @@ async function getArticle(req, res) {
                     }
                   })
     } catch(error) {
-      return res.status(400).json(error)
+      return res.status(400)
+                    .json({ 
+                      "status": "error",
+                      "data": {
+                      "message": error
+                      }
+                  });
     }
   }
 
@@ -146,16 +202,24 @@ async function getArticle(req, res) {
     try{
         const { rows } = await pool.query(deleteQuery, [req.params.id]);
           if(!rows[0]) {
-            return res.status(400).json({'message': 'Article not found'})
+            return res.status(400)
+                        .json({
+                          "status": "error",
+                          "data": {
+                          "message": "Article not found"
+                      }
+                  });
           }
             let profile = rows;
                 const authorized = profile && req.auth && profile[0].userid == req.auth.userId
-                  console.log(profile[0].userid)
-                  console.log(req.auth.userId)
                   if (!(authorized)) {
-                 return res.status('403').json({
-                error: "User is not authorized"
-              })
+                 return res.status(403)
+                              .json({
+                                "status": "error",
+                                 "data": {
+                                "message": "User is not authorized"
+                            }
+                        })
             }
           return res.status(200)
                     .send({
@@ -165,7 +229,13 @@ async function getArticle(req, res) {
                       }
                     })
       } catch(error) {
-      return res.status(404).json(error)
+      return res.status(404)
+                    .json({ 
+                      "status": "error",
+                      "data": {
+                      "message": error
+                      }
+                  });
     }
   }
 
@@ -204,11 +274,23 @@ async function commentArticle (req, res) {
     const { rows } = await pool.query(insertCommentq, insertvalue);
     const find = await pool.query(findOneQ, [req.params.id])
       if(!find.rows[0]) {
-        res.status(400).json({message: "Article not found"})
+        res.status(400)
+                .json({
+                  "status": "error",
+                    "data": {
+                    "message": "Article not found"
+                      }
+                  });
       }
         const response = await pool.query(updateOneQ, values);
         if(!response.rows[0]) {
-          res.status(400).json({message: "Unable to comment on article"})
+          res.status(400)
+                .json({
+                    "status": "error",
+                    "data": {
+                      "message": "Unable to comment on article"
+                    }
+                  })
         }
         const message = await pool.query(commentArticleQ, [req.params.id]);
        return res.status(201)
@@ -223,7 +305,13 @@ async function commentArticle (req, res) {
                         }
                   });
     } catch(error) {
-      return res.status(400).json(error);
+      return res.status(400)
+                     .json({ 
+                      "status": "error",
+                      "data": {
+                      "message": error
+                      }
+                  });
     }
   }
 
@@ -241,7 +329,13 @@ async function feeds(req, res) {
       try {
         const { rows } = await pool.query(feedQuery);
         if (!rows) {
-          return res.status(404).json(error)
+          return res.status(404)
+                      .json({ 
+                        "status": "error",
+                        "data": {
+                        "message": error
+                      }
+                  });
         }
         return res.status(200)
                     .json({
@@ -293,7 +387,13 @@ async function feeds(req, res) {
                           
                     });
     } catch(error) {
-        return res.status(400).send(error)
+        return res.status(400)
+                       .json({ 
+                          "status": "error",
+                          "data": {
+                          "message": error
+                      }
+                  });
     }
   }
 

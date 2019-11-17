@@ -26,14 +26,20 @@ const result = await cloudinary.uploader.upload(file.tempFilePath)
                     "status": "success",
                     "data": {
                       "message": "Gif successfully created",
-                      "articleId": rows[0].gifid,
+                      "gifId": rows[0].gifid,
                       "createdOn": rows[0].createdon,
                       "title": rows[0].title,
                       "imageUrl" : rows[0].imageurl,
                       }
                     });
     } catch(error) {
-      return res.status(400).json(error);
+      return res.status(400)
+                    .json({ 
+                      "status": "error",
+                      "data": {
+                      "message": error
+                      }
+                  });
     }
 
 }
@@ -46,11 +52,27 @@ const result = await cloudinary.uploader.upload(file.tempFilePath)
     try {
       const { rows } = await pool.query(gifQ);
       if (!rows) {
-        return res.status(404).json({'message': 'gifs not found'});
+        return res.status(404)
+                    .json({
+                      "status": "error",
+                      "data": {
+                        "message": "Gifs not found"
+                      }
+                  });
       }
-      return res.status(200).json(rows);
+      return res.status(200)
+                    .json({
+                      "status": "success",
+                      "data": rrows
+                    });
     } catch(error) {
-      return res.status(400).json(error)
+      return res.status(400)
+                    .json({ 
+                      "status": "error",
+                      "data": {
+                      "message": error
+                      }
+                  });
     }
   }
 async function getGif(req, res) {
@@ -65,7 +87,13 @@ async function getGif(req, res) {
       if (!rows[0]) {
           const response = await pool.query(gifQ, [req.params.id]);
           if(!response.rows[0]){
-            return res.status(404).json({'message': 'article not found'});
+            return res.status(404)
+                          .json({
+                            "status": "error",
+                            "data": {
+                                "message": "Gif not found"
+                            }
+                          });
           }
               return res.status(200)
                           .json({
@@ -86,7 +114,7 @@ async function getGif(req, res) {
                             "id": rows[0].gifid,
                             "createdOn": rows[0].createdon,
                             "title": rows[0].title,
-                            "article": rows[0].imageurl,
+                            "imageUrl": rows[0].imageurl,
                             "comments": [
                               {
                                 "commentId":rows[0].commentid,
@@ -107,7 +135,13 @@ async function getGif(req, res) {
                     }
                   })
     } catch(error) {
-      return res.status(400).json(error)
+      return res.status(400)
+                  .json({ 
+                      "status": "error",
+                      "data": {
+                      "message": error
+                      }
+                  });
     }
   }
 
@@ -121,22 +155,30 @@ async function getGif(req, res) {
           }
             let profile = rows;
                 const authorized = profile && req.auth && profile[0].userid == req.auth.userId
-                  console.log(profile[0].userid)
-                  console.log(req.auth.userId)
                   if (!(authorized)) {
-                 return res.status('403').json({
-                error: "User is not authorized"
-              })
-            }
-          return res.status(200)
-                    .send({
-                      "status": "success",
-                      "data": {
-                          "message": "Gif Successfully deleted"
+                 return res.status(403)
+                          .json({
+                            "status": "error",
+                            "data": {
+                              "message": "User is not authorized"
+                            }
+                        })
                       }
+                             return res.status(200)
+                                .send({
+                                 "status": "success",
+                                  "data": {
+                                  "message": "Gif Successfully deleted"
+                            }
                     })
       } catch(error) {
-      return res.status(404).json(error)
+      return res.status(404)
+                    .json({ 
+                      "status": "error",
+                      "data": {
+                      "message": error
+                      }
+                  });
     }
   }
 
@@ -157,7 +199,7 @@ async function commentGif (req, res) {
     const updateOneQ =`UPDATE gifcomments
                         SET comment = $1, createdOn=$2 
                         returning *`;
-    const commentArticleQ = `SELECT title, gifcomments.createdOn, comment
+    const commentgifQ = `SELECT title, gifcomments.createdOn, comment
                             FROM gifs
                               INNER JOIN gifcomments ON gifcomments.gifid = gifs.gifid 
                             WHERE gifs.gifid = $1`;
@@ -170,13 +212,25 @@ async function commentGif (req, res) {
     const { rows } = await pool.query(insertCommentq, insertvalue);
     const find = await pool.query(findOneQ, [req.params.id])
       if(!find.rows[0]) {
-        res.status(400).json({message: "Gif not found"})
+        res.status(400)
+                .json({ 
+                  "status": "error",
+                  "data": {
+                    "message": "Gif not found"
+                  }
+              })
       }
         const response = await pool.query(updateOneQ, values);
         if(!response.rows[0]) {
-          res.status(400).json({message: "Unable to comment on gif"})
+          res.status(400)
+                  .json({
+                    "status": "error",
+                    "data": {
+                      "message": "Unable to comment on gif"
+                    }
+                  })
         }
-        const message = await pool.query(commentArticleQ, [req.params.id]);
+        const message = await pool.query(commentgifQ, [req.params.id]);
        return res.status(201)
                   .json({
                     "status": "success",
@@ -188,7 +242,13 @@ async function commentGif (req, res) {
                         }
                   });
     } catch(error) {
-      return res.status(400).json(error);
+      return res.status(400)
+                  .json({ 
+                      "status": "error",
+                      "data": {
+                      "message": error
+                      }
+                  });
     }
   }
 
