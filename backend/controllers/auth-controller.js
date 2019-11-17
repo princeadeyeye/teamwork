@@ -8,10 +8,23 @@ const expressJwt = require('express-jwt')
 
   async function createUser(req, res) {
     if (!req.body.email || !req.body.password) {
-      return res.status(400).json({'message': 'Some values are missing'});
+      return res.status(400)
+                  .json({
+                    "status": "error",
+                    "data": {
+                      "message": "Some values are missing"
+                    }
+                    
+                  });
     }
     if (!Helper.isValidEmail(req.body.email)) {
-      return res.status(400).json({ 'message': 'Please enter a valid email address' });
+      return res.status(400)
+                    .json({
+                      "status": "error",
+                      "data": {
+                        "message": "Please enter a valid email address"
+                      }
+                   });
     }
     const hashPassword = Helper.hashPassword(req.body.password);
 

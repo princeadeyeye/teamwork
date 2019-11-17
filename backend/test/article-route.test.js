@@ -1,15 +1,13 @@
-const request = require('supertest');
+/*/*const request = require('supertest');
 
 const app = require('../app.js')
 
 
 describe("Article Route", () => {
 
-<<<<<<< HEAD
 
-   const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3MzcyNjg2OSwiZXhwIjoxNTczODEzMjY5fQ.GgFJAcLmo4WIRfp7la02okl0cpGB-rWFQuV0SU3nuxE'
-=======
->>>>>>> testv4_ft
+   const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM2LCJpYXQiOjE1NzM5NjY4NjQsImV4cCI6MTU3NDA1MzI2NH0.vSOnxoP8bCXkxBkUrgPCmlaOkdIiqB8qi5uL6wGv2Jc'
+
   const fakeToken = 'thefaketoken123'
 const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTU3Mzg3MzQyOCwiZXhwIjoxNTczOTU5ODI4fQ.gUQfTH257Yffp0BpKG9yHWEy7Ql_6X7ecz_2w9_20bQ`
  
@@ -40,7 +38,7 @@ const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTU3
          expect(response.statusCode).toBe(201);
         done();
       });
-    });*/
+    });
   });
 
 describe("Update Article Route", () => {
@@ -204,3 +202,5 @@ describe("Get Feed", () => {
   });
 
 })
+
+*/
