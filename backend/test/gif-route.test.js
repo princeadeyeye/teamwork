@@ -5,8 +5,8 @@ const app = require('../app.js')
 describe("Gif Route", () => {
 
 
-    const fakeToken = 'thefaketoken123'
-   const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTU3NDAzMTYyMCwiZXhwIjoxNTc0MTE4MDIwfQ.uP3fJReJqfzVRnFDf7jBzGQTsbN6OfZelzZJFoY9eXw'
+    const fakeToken = ''
+   const token = ''
 
 const testImage = `${__dirname}/../files/images/photo.gif`
 
@@ -69,7 +69,7 @@ describe("Delete Gif Route", () => {
       .set('Authorization', `Bearer ${token}`)
       .set('Accept', 'image/json')
       .then((response) => {
-        expect(response.statusCode).toBe(400);
+        expect(response.statusCode).toBe(401);
         done();
       });
     });
@@ -83,7 +83,7 @@ describe("Get Gif Route", () => {
       .set('Authorization', `Bearer ${token}`)
       .set('Accept', 'image/json')
       .then((response) => {
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).toBe(401);
         done();
       });
     });

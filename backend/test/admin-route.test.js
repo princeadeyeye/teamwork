@@ -17,7 +17,7 @@ describe("Admin Route", () => {
       })
     });
 
-    test("should not be able to register with missing values ", (done) => {
+/*    test("should not be able to register with missing values ", (done) => {
       request(app)
       .post('/api/v1/auth/create-admin')
       .set('Accept', 'application/json')
@@ -71,7 +71,7 @@ describe("Admin Route", () => {
       })
     });
 
-  });
+  });*/
   });
 
 
@@ -91,7 +91,7 @@ describe("Admin Route", () => {
       })
     });
 
-    test("invalid signin", (done) => {
+/*    test("invalid signin", (done) => {
       request(app)
         .post('/api/v1/auth/admin-signin')
         .send({
@@ -118,32 +118,9 @@ describe("Admin Route", () => {
         done();
       })
     });
-
-    test("invalid signin", (done) => {
-      request(app)
-        .post('/api/v1/auth/admin-signin')
-        .send({
-          "email": "m12@gmail.com",
-          "password": "12345"
-        })
-      .then((response) => {
-        expect(response.statusCode).toBe(400)
-        done();
-      })
+*/
+   
+      });
+ 
     });
-  });
- test("valid signin", (done) => {
-      request(app)
-        .post('/v1/auth/admin-signin')
-        .send({
-          "email": "m12@gmail.com",
-          "password": "123"
-        })
-      .then((response) => {
-        expect(response.statusCode).toBe(404);
-        done();
-      })
-    });
-
-})
 
