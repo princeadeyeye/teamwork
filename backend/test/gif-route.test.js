@@ -5,8 +5,10 @@ const app = require('../app.js')
 describe("Gif Route", () => {
 
 
-    const fakeToken = 'thefaketoken123'
-   const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTU3NDAzMTYyMCwiZXhwIjoxNTc0MTE4MDIwfQ.uP3fJReJqfzVRnFDf7jBzGQTsbN6OfZelzZJFoY9eXw'
+    // const token = process.env.ADMINTOKEN
+
+    const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3NDA5OTYwMiwiZXhwIjo4NjU1NzQwOTk2MDJ9.BMrtz_oWheGi7owGli-X3zfJ56F-2kI7uqLW_Ktt-nQ`
+  const fakeToken = 'thefaketoken123'
 
 const testImage = `${__dirname}/../files/images/photo.gif`
 

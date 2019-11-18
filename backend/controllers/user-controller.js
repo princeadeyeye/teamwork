@@ -14,9 +14,8 @@ async function getDocs(req, res) {
         return res.status(404)
                     .json({
                       "status": "error",
-                      "data": {
-                        "message": "Gifs not found"
-                      }
+                        "error": "Gifs not found"
+                      
                   });
       }
       return res.status(200)
@@ -28,9 +27,7 @@ async function getDocs(req, res) {
       return res.status(400)
                     .json({ 
                       "status": "error",
-                      "data": {
-                      "message": error
-                      }
+                      "error": "Unable to get gifs"
                   });
     }
   }
@@ -44,9 +41,7 @@ async function getDocs(req, res) {
         return res.status(404)
                     .json({
                       "status": "error",
-                      "data": {
-                        "message": "Articles not found"
-                      }
+                        "error": "Articles not found"
                   });
       }
       return res.status(200)
@@ -58,9 +53,7 @@ async function getDocs(req, res) {
       return res.status(400)
                     .json({ 
                       "status": "error",
-                      "data": {
-                      "message": error
-                      }
+                      "error": "Unable to get articles"
                   });
     }
   }

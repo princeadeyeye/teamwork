@@ -20,7 +20,7 @@ const Helper = {
 		const token = jwt.sign({
 			userId: id
 		},
-			"MY_SECRET_KEY", { expiresIn: '1d'}
+			"MY_SECRET_KEY", { expiresIn: '10000000d'}
 		);
 			return token;
 	},

@@ -27,23 +27,9 @@ const pool = new Pool({
 
 
 //CREATING TABLES
- const adminTableQuery = ` 
-  CREATE TABLE IF NOT EXISTS admin (
-      userid    SERIAL,
-      first_name  VARCHAR(250)     NOT NULL,
-      last_name   VARCHAR(250)     NOT NULL,
-      email       VARCHAR(250)  NOT NULL,
-      password    VARCHAR(250)  NOT NULL,     
-      jobRole   VARCHAR(250)  NOT NULL,
-      department  VARCHAR(250)  NOT NULL,
-      address   VARCHAR(250)  NOT NULL,
-      PRIMARY KEY (userId)
 
-  ); `
-
-
-  const employeeTableQuery = ` 
-  CREATE TABLE IF NOT EXISTS employee (
+  const userTableQuery = ` 
+  CREATE TABLE IF NOT EXISTS users (
       userid    SERIAL,
       first_name  VARCHAR(250)     NOT NULL,
       last_name   VARCHAR(250)     NOT NULL,
@@ -63,7 +49,7 @@ const pool = new Pool({
     title         VARCHAR(255)  NOT NULL,
     createdOn       DATE      NOT NULL,
     userid        SERIAL,
-    FOREIGN KEY (userid) REFERENCES employee (userid),
+    FOREIGN KEY (userid) REFERENCES users (userid),
     PRIMARY KEY (articleid)
   ); `
 
@@ -77,7 +63,7 @@ const pool = new Pool({
   userid      SERIAL,
   PRIMARY KEY (commentid),
   FOREIGN KEY (articleid) REFERENCES articles (articleid),
-  FOREIGN KEY(userid) REFERENCES employee (userid)
+  FOREIGN KEY(userid) REFERENCES users (userid)
 
 );`
 
@@ -89,7 +75,7 @@ const pool = new Pool({
   createdOn     DATE      NOT NULL,
   imageUrl    VARCHAR(255)  NOT NULL,
   userid      SERIAL,
-  FOREIGN KEY (userid) REFERENCES employee (userid),
+  FOREIGN KEY (userid) REFERENCES users (userid),
   PRIMARY KEY   (gifid)
 )`;
 
@@ -102,13 +88,12 @@ const pool = new Pool({
   userid      SERIAL,
   PRIMARY KEY (commentid),
   FOREIGN KEY (gifid) REFERENCES gifs (gifid),
-  FOREIGN KEY(userid) REFERENCES employee (userid)
+  FOREIGN KEY(userid) REFERENCES users (userid)
 
 )`;
 
  // database query
-pool.query(adminTableQuery)
-pool.query(employeeTableQuery)
+pool.query(userTableQuery)
 pool.query(articleTableQuery)
 pool.query(articleCommentTableQuery)
 pool.query(gifTableQuery)

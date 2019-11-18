@@ -1,42 +1,43 @@
 const request = require('supertest');
 const app = require('../app')
+require('dotenv').config()
 
 
-describe("Employee Route", () => {
+describe("User Route", () => {
+
+// const token = process.env.ADMINTOKEN
+    const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3NDA5OTYwMiwiZXhwIjo4NjU1NzQwOTk2MDJ9.BMrtz_oWheGi7owGli-X3zfJ56F-2kI7uqLW_Ktt-nQ`
+
+  const fakeToken = 'thefaketoken123'
 
 
-
-const faketoken = `ffdvfhfdggdgffmfkvjfhfgkurfbvvfmsfjk,hg,hgh`
- const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3Mzg1MzkyMiwiZXhwIjoxNTczOTQwMzIyfQ.pjFh7H0ubsW0-8fpOQBNn3yFfcp6dw7s-KVGxntYx_A`
-
-  describe("Post Employee Route", () => {
+  describe("Post User Route", () => {
     test("should not be able register successfully ", (done) => {
       request(app)
       .post('/api/v1/auth/create-user/')
       .set('Authorization', `Bearer ${token}`)
       .set('Accept', 'application/json')
       .then((response) => {
-        expect(response.statusCode).toBe(401)
+        expect(response.statusCode).toBe(400)
         expect.stringContaining('Some values are missing')
         expect.stringContaining('Bad Request')
-
         done();
       })
     });
 
-        test("should be able register successfully ", (done) => {
+        test("should return authorized ", (done) => {
           request(app)
           .post('/api/v1/auth/create-user/')
           .set('Accept', 'application/json')
           .send({
              "firstName": "mario",
              "lastName": "gamee",
-              "jobRole": "employee",
-              "department": "techinian",
+              "jobRole": "techinian",
+              "department": "IT",
               "address": "123 conhy street"
             })
           .then((response) => {
-            expect(response.statusCode).toBe(401)
+            expect(response.statusCode).toBe(403)
             done();
           })
     });
@@ -56,7 +57,7 @@ const faketoken = `ffdvfhfdggdgffmfkvjfhfgkurfbvvfmsfjk,hg,hgh`
           "address": "123 conhy street"
         })
       .then((response) => {
-        expect(response.statusCode).toBe(401)
+        expect(response.statusCode).toBe(400)
         expect.stringContaining('Some values are missing')
         expect.stringContaining('Bad Request')
         done();
@@ -79,7 +80,7 @@ const faketoken = `ffdvfhfdggdgffmfkvjfhfgkurfbvvfmsfjk,hg,hgh`
           "address": "123 conhy street"
         })
       .then((response) => {
-        expect(response.statusCode).toBe(401)
+        expect(response.statusCode).toBe(400)
         expect.stringContaining('Please enter a valid email address')
         expect.stringContaining('Bad Request')
         done();
@@ -91,10 +92,10 @@ const faketoken = `ffdvfhfdggdgffmfkvjfhfgkurfbvvfmsfjk,hg,hgh`
     test("should not be able register successfully ", (done) => {
       request(app)
       .post('/api/v1/auth/create-user/')
-      .set('Authorization', `Bearer ${faketoken}`)
+      .set('Authorization', `Bearer ${fakeToken}`)
       .set('Accept', 'application/json')
       .then((response) => {
-        expect(response.statusCode).toBe(401);
+        expect(response.statusCode).toBe(403);
         done();
       })
     });
@@ -108,12 +109,8 @@ const faketoken = `ffdvfhfdggdgffmfkvjfhfgkurfbvvfmsfjk,hg,hgh`
       request(app)
         .post('/api/v1/auth/signin')
         .set('Accept', 'application/json')
-        .send({
-          "email": "m12@gmail.com",
-          "password": "123"
-        })
       .then((response) => {
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).toBe(400);
         done();
       })
     });

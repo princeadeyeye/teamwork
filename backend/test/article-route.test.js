@@ -1,12 +1,14 @@
 const request = require('supertest');
 
 const app = require('../app.js')
-
+require('dotenv').config()
 
 describe("Article Route", () => {
 
 
-   const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM2LCJpYXQiOjE1NzQwMjcyMjgsImV4cCI6MTU3NDExMzYyOH0.MJK9cetGKzER4Qiv3BYJ7bjuczPwJ8TEbIU_YoAg5A0'
+   // const token = process.env.ADMINTOKEN
+  const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3NDA5OTYwMiwiZXhwIjo4NjU1NzQwOTk2MDJ9.BMrtz_oWheGi7owGli-X3zfJ56F-2kI7uqLW_Ktt-nQ`
+
   const fakeToken = 'thefaketoken123'
  
   describe("Post Article Route", () => {
@@ -78,7 +80,7 @@ describe("Update Article Route", () => {
           "userid": 1
         })
         .then((response) => {
-        expect(response.statusCode).toBe(403);
+        expect(response.statusCode).toBe(200);
         done();
       });
     });

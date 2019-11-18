@@ -34,11 +34,9 @@ const result = await cloudinary.uploader.upload(file.tempFilePath)
                     });
     } catch(error) {
       return res.status(400)
-                    .json({ 
+                  .json({ 
                       "status": "error",
-                      "data": {
-                      "message": error
-                      }
+                      "error": "Unable to create gifs"
                   });
     }
 
@@ -53,11 +51,9 @@ const result = await cloudinary.uploader.upload(file.tempFilePath)
       const { rows } = await pool.query(gifQ);
       if (!rows) {
         return res.status(404)
-                    .json({
+                        .json({
                       "status": "error",
-                      "data": {
-                        "message": "Gifs not found"
-                      }
+                        "error": "Gifs not found"
                   });
       }
       return res.status(200)
@@ -69,9 +65,7 @@ const result = await cloudinary.uploader.upload(file.tempFilePath)
       return res.status(400)
                     .json({ 
                       "status": "error",
-                      "data": {
-                      "message": error
-                      }
+                      "error": "Unable to get gifs"
                   });
     }
   }
@@ -89,11 +83,9 @@ async function getGif(req, res) {
           if(!response.rows[0]){
             return res.status(404)
                           .json({
-                            "status": "error",
-                            "data": {
-                                "message": "Gif not found"
-                            }
-                          });
+                          "status": "error",
+                            "error": "Gif not found"
+                        });
           }
               return res.status(200)
                           .json({
@@ -136,11 +128,9 @@ async function getGif(req, res) {
                   })
     } catch(error) {
       return res.status(400)
-                  .json({ 
+                 .json({ 
                       "status": "error",
-                      "data": {
-                      "message": error
-                      }
+                      "error": "unable to get the specific gif"
                   });
     }
   }
@@ -151,19 +141,20 @@ async function getGif(req, res) {
     try{
         const { rows } = await pool.query(deleteQuery, [req.params.id]);
           if(!rows[0]) {
-            return res.status(400).json({'message': 'Gif not found'})
+            return res.status(400)
+                         .json({
+                          "status": "error",
+                          "error": "Gif not found"
+                  });
           }
             let profile = rows;
                 const authorized = profile && req.auth && profile[0].userid == req.auth.userId
                   if (!(authorized)) {
                  return res.status(403)
-                          .json({
-                            "status": "error",
-                            "data": {
-                              "message": "User is not authorized"
-                            }
-                        })
-                      }
+                             .json({
+                                "status": "error",
+                                "error": "User is not authorized"
+                        })                      }
                              return res.status(200)
                                 .send({
                                  "status": "success",
@@ -173,11 +164,9 @@ async function getGif(req, res) {
                     })
       } catch(error) {
       return res.status(404)
-                    .json({ 
+                   .json({ 
                       "status": "error",
-                      "data": {
-                      "message": error
-                      }
+                      "error": "Unable to delete gif"
                   });
     }
   }
@@ -213,22 +202,19 @@ async function commentGif (req, res) {
     const find = await pool.query(findOneQ, [req.params.id])
       if(!find.rows[0]) {
         res.status(400)
-                .json({ 
+               .json({
                   "status": "error",
-                  "data": {
-                    "message": "Gif not found"
-                  }
-              })
+                    "error": "Gif not found"
+                  });
       }
         const response = await pool.query(updateOneQ, values);
         if(!response.rows[0]) {
           res.status(400)
-                  .json({
+                .json({
                     "status": "error",
-                    "data": {
-                      "message": "Unable to comment on gif"
-                    }
+                      "error": "Unable to comment on gif"
                   })
+
         }
         const message = await pool.query(commentgifQ, [req.params.id]);
        return res.status(201)
@@ -243,13 +229,12 @@ async function commentGif (req, res) {
                   });
     } catch(error) {
       return res.status(400)
-                  .json({ 
+                      .json({ 
                       "status": "error",
-                      "data": {
-                      "message": error
-                      }
+                      "error": "Comment failed"
                   });
-    }
+    
+              }
   }
 
 

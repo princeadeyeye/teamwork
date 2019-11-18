@@ -2,18 +2,36 @@ const moment = require ('moment');
 const pool = require ('../database/db');
 const Helper = require ('../Helper');
 const expressJwt = require('express-jwt')
+require('dotenv').config()
 
 
 
 
   async function createUser(req, res) {
+ // const bearerToken = process.env.ADMINTOKEN
+    const bearerToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3NDA5OTYwMiwiZXhwIjo4NjU1NzQwOTk2MDJ9.BMrtz_oWheGi7owGli-X3zfJ56F-2kI7uqLW_Ktt-nQ`
+    
+    const bearerHeader = req.headers["authorization"];
+    if (typeof bearerHeader == 'undefined') {
+      return res.status(403)
+                  .json({ 
+                    "status": "error",
+                    "error": "Unauthorized "
+                  });
+    }
+        var bearer = bearerHeader.split(" ");
+        if (!(bearerToken === bearer[1])) {
+             return res.status(403)
+                  .json({ 
+                    "status": "error",
+                    "error": "Unauthorized"
+                  });
+       }
     if (!req.body.email || !req.body.password) {
       return res.status(400)
                   .json({
                     "status": "error",
-                    "data": {
-                      "message": "Some values are missing"
-                    }
+                    "error": "Some values are missing"
                     
                   });
     }
@@ -21,15 +39,13 @@ const expressJwt = require('express-jwt')
       return res.status(400)
                     .json({
                       "status": "error",
-                      "data": {
-                        "message": "Please enter a valid email address"
-                      }
+                        "error": "Please enter a valid email address"
                    });
     }
     const hashPassword = Helper.hashPassword(req.body.password);
 
     const createQuery = `INSERT INTO
-      employee(
+      users(
        first_name, last_name , email, password, jobRole, department, address )
         VALUES($1, $2, $3, $4, $5, $6, $7)
         returning *`;
@@ -59,17 +75,14 @@ const expressJwt = require('express-jwt')
         return res.status(400)
                   .json({ 
                     "status": "error",
-                    "data": {
-                    "message": 'Employee with that EMAIL already exist' 
-                      }
+                    "error": 'users with that EMAIL already exist' 
                   });
       }
       return res.status(400)
                   .json({ 
                     "status": "error",
-                    "data": {
-                    "message": error
-                      }
+                    "error": "Unable to create a user"
+       
                   });
     }
   }
@@ -79,39 +92,31 @@ const expressJwt = require('express-jwt')
       return res.status(400)
                   .json({
                      "status": "error",
-                      "data": {
-                      "message": "Some values are missing"
-                      }
+                      "error": "Some values are missing"
                     });
       }
     if (!Helper.isValidEmail(req.body.email)) {
       return res.status(400)
                     .json({
                      "status": "error",
-                      "data": {
-                      "message": "Enter a valid email passwword"
-                      }
+                      "error": "Enter a valid email passwword"
                     });
     }
-    const text = 'SELECT * FROM employee WHERE email = $1';
+    const text = 'SELECT * FROM users WHERE email = $1';
     try {
       const { rows } = await pool.query(text, [req.body.email]);
       if (!rows[0]) {
         return res.status(400)
                     .json({
                      "status": "error",
-                    "data": {
-                    "message": "The credentials you provided is incorrect"
-                      }
+                    "error": "The credentials you provided is incorrect"
                     });
       }
         if(!Helper.comparePassword(rows[0].password, req.body.password)) {
           return res.status(400)
                         .json({
                           "status": "error",
-                          "data": {
-                          "message": "The password you provided did not match"
-                          }
+                          "error": "The password you provided did not match"
                         });
         }
         const id = rows[0].userid
@@ -128,14 +133,11 @@ const expressJwt = require('express-jwt')
       return res.status(400)
                     .json({ 
                     "status": "error",
-                    "data": {
-                    "message": error
-                      }
+                    "error": "Unable to signin user"
                   });
     }
 
   }
-
 
      const requireSignin = expressJwt({
       secret: "MY_SECRET_KEY",

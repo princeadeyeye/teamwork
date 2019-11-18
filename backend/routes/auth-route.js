@@ -1,12 +1,11 @@
 const express = require('express');
 const authCtrl = require('../controllers/auth-controller');
-const adminCtrl = require('../controllers/admin-controller');
 
 
 const router = express.Router();
 
 // create a user
-router.post('/api/v1/auth/create-user/', adminCtrl.requireSignin, authCtrl.createUser)
+router.post('/api/v1/auth/create-user/', authCtrl.createUser)
 
 // user signin
 router.post('/api/v1/auth/signin', authCtrl.signin)

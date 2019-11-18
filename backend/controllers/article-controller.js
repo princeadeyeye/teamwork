@@ -39,12 +39,10 @@ async function createArticle (req, res) {
       return res.status(400)
                     .json({ 
                       "status": "error",
-                      "data": {
-                      "message": error
-                      }
+                      "error": "Unable to create articles"
                   });
-    }
-  }
+              }
+           }
 
 async function updateArticle(req, res) {
     const findOneQuery = 'SELECT * FROM articles WHERE articleid=$1';
@@ -57,9 +55,7 @@ async function updateArticle(req, res) {
         return res.status(404)
                       .json({
                       "status": "error",
-                      "data": {
-                        "message": "Article not found"
-                      }
+                        "error": "Article not found"
                     });
       }
         let profile = rows;
@@ -68,9 +64,7 @@ async function updateArticle(req, res) {
            return res.status(403)
                         .json({
                             "status": "error",
-                            "data": {
-                              "message": "User is not authorized"
-                            }
+                              "error": "User is not authorized"
                         })
       }
       const values = [
@@ -91,9 +85,7 @@ async function updateArticle(req, res) {
       return res.status(400)
                     .json({ 
                       "status": "error",
-                      "data": {
-                      "message": error
-                      }
+                      "error": "Unable to query database"
                   });
     }
   }
@@ -106,18 +98,14 @@ async function listArticles(req, res) {
         return res.status(404)
                       .json({
                       "status": "error",
-                      "data": {
-                        "message": "Articles not found"
-                      }
+                        "error": "Articles not found"
                   });
       }
       if(rows === undefined || rows.length === 0) {
         return res.status(404)
                     .send({ 
                       "status": "error",
-                      "data": {
-                        "message": "Category not found"
-                      }
+                        "error": "Category not found"
                     })
       }
       return res.status(200)
@@ -129,9 +117,7 @@ async function listArticles(req, res) {
       return res.status(400)
                     .json({ 
                       "status": "error",
-                      "data": {
-                      "message": error
-                      }
+                      "error": "Unable to get articles"
                   });
     }
   }
@@ -150,9 +136,7 @@ async function getArticle(req, res) {
             return res.status(404)
                         .json({
                           "status": "error",
-                          "data": {
-                            "message": "article not found"
-                          }
+                            "error": "article not found"
                         });
           }
               return res.status(200)
@@ -180,6 +164,26 @@ async function getArticle(req, res) {
                                 "commentId":rows[0].commentid,
                                 "comment":rows[0].comment,
                                 "authorId": rows[0].userid,
+                              },
+                                {
+                                "commentId":rows[1].commentid,
+                                "comment":rows[1].comment,
+                                "authorId": rows[1].userid,
+                              },
+                                {
+                                "commentId":rows[2].commentid,
+                                "comment":rows[2].comment,
+                                "authorId": rows[2].userid,
+                              },  
+                                {
+                                "commentId":rows[3].commentid,
+                                "comment":rows[3].comment,
+                                "authorId": rows[3].userid,
+                              },
+                                {
+                                "commentId":rows[4].commentid,
+                                "comment":rows[4].comment,
+                                "authorId": rows[4].userid,
                               }
             
                             ]
@@ -189,9 +193,7 @@ async function getArticle(req, res) {
       return res.status(400)
                     .json({ 
                       "status": "error",
-                      "data": {
-                      "message": error
-                      }
+                      "error": "unable to get the specific article"
                   });
     }
   }
@@ -205,9 +207,7 @@ async function getArticle(req, res) {
             return res.status(400)
                         .json({
                           "status": "error",
-                          "data": {
-                          "message": "Article not found"
-                      }
+                          "error": "Article not found"
                   });
           }
             let profile = rows;
@@ -216,9 +216,7 @@ async function getArticle(req, res) {
                  return res.status(403)
                               .json({
                                 "status": "error",
-                                 "data": {
-                                "message": "User is not authorized"
-                            }
+                                "error": "User is not authorized"
                         })
             }
           return res.status(200)
@@ -232,9 +230,7 @@ async function getArticle(req, res) {
       return res.status(404)
                     .json({ 
                       "status": "error",
-                      "data": {
-                      "message": error
-                      }
+                      "error": "Unable to delete article"
                   });
     }
   }
@@ -277,9 +273,7 @@ async function commentArticle (req, res) {
         res.status(400)
                 .json({
                   "status": "error",
-                    "data": {
-                    "message": "Article not found"
-                      }
+                    "error": "Article not found"
                   });
       }
         const response = await pool.query(updateOneQ, values);
@@ -287,9 +281,7 @@ async function commentArticle (req, res) {
           res.status(400)
                 .json({
                     "status": "error",
-                    "data": {
-                      "message": "Unable to comment on article"
-                    }
+                      "error": "Unable to comment on article"
                   })
         }
         const message = await pool.query(commentArticleQ, [req.params.id]);
@@ -308,9 +300,7 @@ async function commentArticle (req, res) {
       return res.status(400)
                      .json({ 
                       "status": "error",
-                      "data": {
-                      "message": error
-                      }
+                      "error": "Comment failed"
                   });
     }
   }
@@ -332,9 +322,7 @@ async function feeds(req, res) {
           return res.status(404)
                       .json({ 
                         "status": "error",
-                        "data": {
-                        "message": error
-                      }
+                        "error": "Unable to get feed"
                   });
         }
         return res.status(200)
@@ -346,43 +334,30 @@ async function feeds(req, res) {
                             "createdOn": rows[0].createdon,
                             "title": rows[0].title,
                             "article/url": rows[0].article,
-                            "authorId": rows[0].userid,
+                            "authorId": rows[0].userid
                           },
                           {
                             "id": rows[1].articleid,
                             "createdOn": rows[1].createdon,
                             "title": rows[1].title,
                             "article/url": rows[1].article,
-                            "authorId": rows[1].userid,
+                            "authorId": rows[1].userid
                           }, 
                           {
                             "id": rows[2].articleid,
                             "createdOn": rows[2].createdon,
                             "title": rows[2].title,
                             "article/url": rows[2].article,
-                            "authorId": rows[2].userid,
+                            "authorId": rows[2].userid
                           },
                           {
                             "id": rows[3].articleid,
                             "createdOn": rows[3].createdon,
                             "title": rows[3].title,
                             "article/url": rows[3].article,
-                            "authorId": rows[3].userid,
-                          },
-                          {
-                            "id": rows[4].articleid,
-                            "createdOn": rows[4].createdon,
-                            "title": rows[4].title,
-                            "article/url": rows[4].article,
-                            "authorId": rows[4].userid,
-                          },
-                          {
-                            "id": rows[5].articleid,
-                            "createdOn": rows[5].createdon,
-                            "title": rows[5].title,
-                            "article/url": rows[5].article,
-                            "authorId": rows[5].userid,
+                            "authorId": rows[3].userid
                           }
+                       
                         ]
                           
                     });
@@ -390,9 +365,8 @@ async function feeds(req, res) {
         return res.status(400)
                        .json({ 
                           "status": "error",
-                          "data": {
-                          "message": error
-                      }
+                          "error": error
+                      
                   });
     }
   }
