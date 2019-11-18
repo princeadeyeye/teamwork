@@ -18,10 +18,6 @@ const adminRoute = require('./routes/admin-route')
 // express
 const app = express();
 
-
-app.get('/', (req, res) => {
-	res.send('testing')
-})
 // MIDDLEWARE
 
 app.use(bodyParser.json())
