@@ -85,7 +85,7 @@ describe("Get Gif Route", () => {
       .set('Authorization', `Bearer ${token}`)
       .set('Accept', 'image/json')
       .then((response) => {
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).toBe(400);
         done();
       });
     });
