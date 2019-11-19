@@ -7,7 +7,7 @@
     "start": "node ./backend/server",
     "nodemon": "nodemon ./backend/server",
     "lint": "eslint '**/*.js' --write",
-    "test": "jest",
+    "test": "jest ",
     "coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls"
   },
   "repository": {

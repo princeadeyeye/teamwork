@@ -26,6 +26,7 @@ const pool = new Pool({
 // 
 
 
+
 //CREATING TABLES
 
   const userTableQuery = ` 
@@ -98,7 +99,7 @@ pool.query(articleTableQuery)
 pool.query(articleCommentTableQuery)
 pool.query(gifTableQuery)
 pool.query(gifCommentTableQuery)
-   
+
 
 module.exports = {
  

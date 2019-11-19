@@ -2,31 +2,22 @@ const moment = require ('moment');
 const pool = require ('../database/db');
 const Helper = require ('../Helper');
 const expressJwt = require('express-jwt')
+const jwt = require ('jsonwebtoken')
 require('dotenv').config()
 
 
 
 
-  async function createUser(req, res) {
- // const bearerToken = process.env.ADMINTOKEN
-    const bearerToken = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3NDA5OTYwMiwiZXhwIjo4NjU1NzQwOTk2MDJ9.BMrtz_oWheGi7owGli-X3zfJ56F-2kI7uqLW_Ktt-nQ`
-    
-    const bearerHeader = req.headers["authorization"];
-    if (typeof bearerHeader == 'undefined') {
-      return res.status(403)
-                  .json({ 
-                    "status": "error",
-                    "error": "Unauthorized "
-                  });
-    }
-        var bearer = bearerHeader.split(" ");
-        if (!(bearerToken === bearer[1])) {
-             return res.status(403)
-                  .json({ 
-                    "status": "error",
-                    "error": "Unauthorized"
-                  });
-       }
+  async function createUser(req, res) { 
+    const authorized = (req.auth.userId === 6)
+  if (!(authorized)) {
+    return res.status(403)
+          .json({
+            "status": "error",
+             "error": "User is not authorized"
+    })
+  }
+
     if (!req.body.email || !req.body.password) {
       return res.status(400)
                   .json({
@@ -42,6 +33,7 @@ require('dotenv').config()
                         "error": "Please enter a valid email address"
                    });
     }
+
     const hashPassword = Helper.hashPassword(req.body.password);
 
     const createQuery = `INSERT INTO
@@ -145,5 +137,40 @@ require('dotenv').config()
     })
 
 
+/*var secretCallback = function(req, payload, done){
+  var issuer = payload.iss;
+ 
+  data.getTenantByIdentifier(issuer, function(err, tenant){
+    if (err) { return done(err); }
+    if (!tenant) { return done(new Error('missing_secret')); }
+ 
+    var secret = utilities.decrypt(tenant.secret);
+    done(null, secret);
+  });
+};
+ 
+app.get('/protected',
+  jwt({secret: secretCallback}),
+  function(req, res) {
+    if (!req.user.admin) return res.sendStatus(401);
+    res.sendStatus(200);
+  });
+
+*/
+/*
+const hasAuthorization = (req, res, next) => {
+  
+  const authorized = req.auth.userId == 6
+  console.log(authorized)
+  if (!(authorized)) {
+    return res.status(403).json({
+      error: "User is not authorized"
+    })
+  }
+  next()
+}*/
+
+
 
 module.exports = { createUser, signin, requireSignin }
+

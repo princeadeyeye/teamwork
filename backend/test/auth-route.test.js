@@ -7,7 +7,7 @@ describe("User Route", () => {
 
 // const token = process.env.ADMINTOKEN
     const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTU3NDA5OTYwMiwiZXhwIjo4NjU1NzQwOTk2MDJ9.BMrtz_oWheGi7owGli-X3zfJ56F-2kI7uqLW_Ktt-nQ`
-
+const ADMINTOKEN = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTU3NDE4MDAxMiwiZXhwIjo4NjU1NzQxODAwMTJ9.a1zlB4jcVzLK-UTqU4d2rrdE45oNTjLWRaqRekJ40PI`
   const fakeToken = 'thefaketoken123'
 
 
@@ -18,8 +18,8 @@ describe("User Route", () => {
       .set('Authorization', `Bearer ${token}`)
       .set('Accept', 'application/json')
       .then((response) => {
-        expect(response.statusCode).toBe(400)
-        expect.stringContaining('Some values are missing')
+        expect(response.statusCode).toBe(403)
+        expect.stringContaining('user not recognized')
         expect.stringContaining('Bad Request')
         done();
       })
@@ -37,7 +37,8 @@ describe("User Route", () => {
               "address": "123 conhy street"
             })
           .then((response) => {
-            expect(response.statusCode).toBe(403)
+            expect(response.statusCode).toBe(401)
+            expect.stringContaining('unauthorized')
             done();
           })
     });
@@ -45,7 +46,7 @@ describe("User Route", () => {
     test("should not be able to register with missing values ", (done) => {
       request(app)
       .post('/api/v1/auth/create-user/')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${ADMINTOKEN}`)
       .set('Accept', 'application/json')
       .send({
          "firstName": "",
@@ -58,7 +59,7 @@ describe("User Route", () => {
         })
       .then((response) => {
         expect(response.statusCode).toBe(400)
-        expect.stringContaining('Some values are missing')
+        expect.stringContaining('some values are missing')
         expect.stringContaining('Bad Request')
         done();
       })
@@ -68,7 +69,7 @@ describe("User Route", () => {
     test("should not be able to register with invalid email ", (done) => {
       request(app)
       .post('/api/v1/auth/create-user/')
-      .set('Authorization', `Bearer ${token}`)
+      .set('Authorization', `Bearer ${ADMINTOKEN}`)
       .set('Accept', 'application/json')
       .send({
          "firstName": "taiwo",
@@ -95,7 +96,7 @@ describe("User Route", () => {
       .set('Authorization', `Bearer ${fakeToken}`)
       .set('Accept', 'application/json')
       .then((response) => {
-        expect(response.statusCode).toBe(403);
+        expect(response.statusCode).toBe(401);
         done();
       })
     });
