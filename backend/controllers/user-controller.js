@@ -69,6 +69,7 @@ async function getDocs(req, res) {
                         "error": "Users not found"
                   });
       }
+      rows.password = undefined
       return res.status(200)
                     .json({
                       "status": "success",
@@ -94,10 +95,19 @@ async function getDocs(req, res) {
                         "error": "User not found"
                   });
       }
+      rows.password = undefined;
       return res.status(200)
                     .json({
                       "status": "success",
-                      "data": rows
+                      "data": {
+                        "userId": rows[0].userid,
+                        "firstName": rows[0].first_name,
+                        "lastName": rows[0].last_name,
+                        "email": rows[0].email,
+                        "jobRole": rows[0].jobrole,
+                        "department": rows[0].department,
+                        "address": rows[0].address
+                      }
                     });
     } catch(error) {
       return res.status(400)
