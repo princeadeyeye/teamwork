@@ -24,10 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true}))
 app.use(cookieParser())
 app.use(compress())
 app.use(helmet())
-const corsOptions = {
-  origin: 'http://localhost:3000', 'https://adeyeyeteamwork.herokuapp.com/',
-}
-app.use(cors(corsOptions))
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
