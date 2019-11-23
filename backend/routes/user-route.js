@@ -12,12 +12,12 @@ router.get('/api/v1/sample/articles', userCtrl.getArticles)
 
 
 //sample gifs
-router.get('/api/v1/sample/gifs', userCtrl.getGifs)
+router.get('/api/v1/sample/gifs',  userCtrl.getGifs)
 
 //get user
 
-router.get('/api/v1/users/:id', userCtrl.getUser)
+router.get('/api/v1/users/:id', authCtrl.requireSignin, userCtrl.getUser)
 
 
-router.get('/api/v1/users/', userCtrl.getUsers)
+router.get('/api/v1/users/', authCtrl.requireSignin, userCtrl.getUsers)
 module.exports = router;
