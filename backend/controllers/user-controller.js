@@ -58,4 +58,56 @@ async function getDocs(req, res) {
     }
   }
 
-module.exports = { getDocs, getGifs, getArticles }
+  async function getUsers(req, res) {
+    const usersQ= 'SELECT * FROM users ORDER BY userid ASC'; 
+    try {
+      const { rows } = await pool.query(usersQ);
+      if (!rows) {
+        return res.status(404)
+                        .json({
+                      "status": "error",
+                        "error": "Users not found"
+                  });
+      }
+      return res.status(200)
+                    .json({
+                      "status": "success",
+                      "data": rows
+                    });
+    } catch(error) {
+      return res.status(400)
+                    .json({ 
+                      "status": "error",
+                      "error": "Unable to get users"
+                  });
+    }
+  }
+
+  async function getUser(req, res) {
+    const userQ = `SELECT * FROM users WHERE userid = $1`;
+    try {
+      const { rows } = await pool.query(userQ, [req.params.id]);
+      if (!rows) {
+        return res.status(404)
+                        .json({
+                      "status": "error",
+                        "error": "User not found"
+                  });
+      }
+      return res.status(200)
+                    .json({
+                      "status": "success",
+                      "data": rows
+                    });
+    } catch(error) {
+      return res.status(400)
+                    .json({ 
+                      "status": "error",
+                      "error": "Unable to get User"
+                  });
+    }
+  }
+
+
+
+module.exports = { getDocs, getGifs, getArticles, getUser, getUsers }
