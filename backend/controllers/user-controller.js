@@ -150,7 +150,8 @@ async function getDocs(req, res) {
           req.body.password,
           req.body.jobRole,
           req.body.department,
-          req.body.address
+          req.body.address,
+          req.params.id
     ];
       const response = await pool.query(updateOneQuery, values);
       return res.status(200)
