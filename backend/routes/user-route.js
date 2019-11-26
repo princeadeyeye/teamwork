@@ -20,5 +20,9 @@ router.get('/api/v1/sample/gifs',  userCtrl.getGifs)
 router.get('/api/v1/users/:id', authCtrl.requireSignin, userCtrl.getUser)
 
 
+// update user
+router.put('/api/v1/users/:id', authCtrl.requireSignin, userCtrl.updateUser)
+
+
 router.get('/api/v1/users/', authCtrl.requireSignin, userCtrl.getUsers)
 module.exports = router;

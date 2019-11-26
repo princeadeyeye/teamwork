@@ -95,7 +95,7 @@ async function getDocs(req, res) {
                         "error": "User not found"
                   });
       }
-      rows.password = undefined;
+      rows[0].password = undefined;
       return res.status(200)
                     .json({
                       "status": "success",
@@ -119,5 +119,55 @@ async function getDocs(req, res) {
   }
 
 
+  async function updateUser(req, res) {
+    const findOneQuery = 'SELECT * FROM users WHERE userid=$1';
+    const updateOneQuery =`UPDATE users
+      SET first_name=$1, last_name=$2, email=$3, password=$4,
+      jobRole=$5, department=$6, address= $7
+      WHERE userid=$8 returning *`;
+    try {
+      const { rows } = await pool.query(findOneQuery, [req.params.id]);
+      if(!rows[0]) {
+        return res.status(404)
+                      .json({
+                      "status": "error",
+                        "error": "User not found"
+                    });
+      }
+        let profile = rows;
+          const authorized = profile && req.auth && profile[0].userid == req.auth.userId
+            if (!(authorized)) {
+           return res.status(403)
+                        .json({
+                            "status": "error",
+                              "error": "User is not authorized"
+                        })
+      }
+       const values = [
+          req.body.firstName,
+          req.body.lastName,
+          req.body.email,
+          req.body.password,
+          req.body.jobRole,
+          req.body.department,
+          req.body.address
+    ];
+      const response = await pool.query(updateOneQuery, values);
+      return res.status(200)
+                .json({
+                  "status": "success",
+                  "data": {
+                      "message": "User successfully updated",
+                  }
+                });
+    } catch(err) {
+      return res.status(400)
+                    .json({ 
+                      "status": "error",
+                      "error": "Unable to query database"
+                  });
+    }
+  }
 
-module.exports = { getDocs, getGifs, getArticles, getUser, getUsers }
+
+module.exports = { getDocs, getGifs, getArticles, getUser, getUsers, updateUser }
