@@ -144,13 +144,13 @@ async function getDocs(req, res) {
                         })
       }
        const values = [
-          req.body.firstName,
-          req.body.lastName,
-          req.body.email,
-          req.body.password,
-          req.body.jobRole,
-          req.body.department,
-          req.body.address,
+          req.body.firstName || rows[0].firstName,
+          req.body.lastName || rows[0].lastName,
+          req.body.email || rows[0].email,
+          req.body.password || rows[0].password,
+          req.body.jobRole || rows[0].jobrole,
+          req.body.department || rows[0].department,
+          req.body.address || rows[0].address,
           req.params.id
     ];
       const response = await pool.query(updateOneQuery, values);
