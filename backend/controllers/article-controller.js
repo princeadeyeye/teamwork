@@ -325,42 +325,16 @@ async function feeds(req, res) {
                         "error": "Unable to get feed"
                   });
         }
-        return res.status(200)
+        for(let i = 0; i < rows.length; i++) {
+           return res.status(200)
                     .json({
                         "status": "success",
-                          "data": [
-                            {
-                            "id": rows[0].articleid,
-                            "createdOn": rows[0].createdon,
-                            "title": rows[0].title,
-                            "article/url": rows[0].article,
-                            "authorId": rows[0].userid
-                          },
-                          {
-                            "id": rows[1].articleid,
-                            "createdOn": rows[1].createdon,
-                            "title": rows[1].title,
-                            "article/url": rows[1].article,
-                            "authorId": rows[1].userid
-                          }, 
-                          {
-                            "id": rows[2].articleid,
-                            "createdOn": rows[2].createdon,
-                            "title": rows[2].title,
-                            "article/url": rows[2].article,
-                            "authorId": rows[2].userid
-                          },
-                          {
-                            "id": rows[3].articleid,
-                            "createdOn": rows[3].createdon,
-                            "title": rows[3].title,
-                            "article/url": rows[3].article,
-                            "authorId": rows[3].userid
-                          }
+                          "data": rows
                        
-                        ]
-                          
-                    });
+        });
+        
+        }
+          
     } catch(error) {
         return res.status(400)
                        .json({ 
